@@ -48,36 +48,36 @@ def stock_quote(symbol, date):
     return f
 
 
-
 def getPageAlpha(search):
-    url = 'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=' + search + '&apikey=7MU4HCSA2Y0BWMJP'
+    url = BASE_SEARCH_URL + search + '&apikey=' + API_KEY
     response = urllib.request.urlopen(url)
-    global thepage
-    thepage = response.read().decode('utf-8')
-    return thepage
+    logger.debug("Retrieving search for '%s' on %s" % (search,
+                                                       url))
+    json_response_page = response.read().decode('utf-8')
+    return json_response_page
 
 
-def findCurrency(jsondata, currency=None, markt=None):
+def findCurrency(json_response_page, currency=None, markt=None):
     if currency is None:
         currency = 'EUR'
     if markt is None:
         markt = "Frankfurt"
-    loaded_json = json.loads(jsondata)
-    loaded_json = loaded_json["bestMatches"]
-    for data in loaded_json:
-        if currency in data["8. currency"] and markt in data["4. region"]:
-            matchscore = float(data["9. matchScore"])
-            print(data["1. symbol"], data["2. name"], matchscore)
-            break
-    return loaded_json
+    loaded_json = json.loads(json_response_page)
+    try:
+        loaded_json = loaded_json["bestMatches"]
+        for data in loaded_json:
+            if currency in data["8. currency"] and markt in data["4. region"]:
+                return data["1. symbol"]
+                break
+            else:
+                continue
+    except KeyError as err:
+        raise ValueError('Data isn´t correct. Check inputs!')
 
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-    findCurrency(getPageAlpha("Hypoport"))
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     r = stock_quote("FRA:VOW", (datetime.datetime.now() -
                                 datetime.timedelta(days=1)).date())
     print(r)
+    print(findCurrency(getPageAlpha("")))
