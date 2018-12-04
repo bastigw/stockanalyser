@@ -1,0 +1,6 @@
+#!/bin/bash -eu
+
+basedir="$(dirname "$(readlink -f "$0")")"
+
+cd "$basedir/.."
+pep8 main.py stockanalyser
