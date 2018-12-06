@@ -34,8 +34,8 @@ def get_yql_result(params):
             logger.debug("Got Yahoo stock data response: '%s'" % resp)
             res = json.loads(resp.decode("utf-8"))
             if (int(res["query"]["count"]) == 0 or
-                ("Name" in res["query"]["results"]["quote"] and
-                 not res["query"]["results"]["quote"]["Name"])):
+                    ("Name" in res["query"]["results"]["quote"] and
+                     not res["query"]["results"]["quote"]["Name"])):
                 raise EmptyStockDataResponse("Stock data from Yahoo doesn't"
                                              " contain values. Invalid Stock"
                                              " Symbol? For non US-Stocks a"
@@ -60,20 +60,19 @@ def get_stock_info(symbol):
     req = urllib.request.Request(url)
     resp = urllib.request.urlopen(req).read()
 
-    r=resp.decode("utf-8")
-    i1=0
-    i1=r.find('root.App.main', i1)
-    i1=r.find('{', i1)
-    i2=r.find("\n", i1)
-    i2=r.rfind(';', i1, i2)
-    jsonstr=r[i1:i2]
+    r = resp.decode("utf-8")
+    i1 = 0
+    i1 = r.find('root.App.main', i1)
+    i1 = r.find('{', i1)
+    i2 = r.find("\n", i1)
+    i2 = r.rfind(';', i1, i2)
+    jsonstr = r[i1:i2]
 
     data = json.loads(jsonstr)
-    market_cap=data['context']['dispatcher']['stores']['QuoteSummaryStore']['summaryDetail']['marketCap']['raw']
-    prev_close=data['context']['dispatcher']['stores']['QuoteSummaryStore']['summaryDetail']['previousClose']['raw']
-    currency=data['context']['dispatcher']['stores']['QuoteSummaryStore']['summaryDetail']['currency']
-    name=data['context']['dispatcher']['stores']['QuoteSummaryStore']['price']['shortName']
-
+    market_cap = data['context']['dispatcher']['stores']['QuoteSummaryStore']['summaryDetail']['marketCap']['raw']
+    prev_close = data['context']['dispatcher']['stores']['QuoteSummaryStore']['summaryDetail']['previousClose']['raw']
+    currency = data['context']['dispatcher']['stores']['QuoteSummaryStore']['summaryDetail']['currency']
+    name = data['context']['dispatcher']['stores']['QuoteSummaryStore']['price']['shortName']
 
     res = {}
     res["Name"] = name
@@ -83,16 +82,23 @@ def get_stock_info(symbol):
 
     return res
 
+def lookupSymbol(name, loc = None):
+    if loc is None:
+        loc = 'GER'
 
-def lookupSymbol(isin):
-        lookup_url = "https://de.finance.yahoo.com/lookup?s=%s" % isin
-        etree = common.url_to_etree(lookup_url)
-        #TODO using the same query we can easily find out the stock exchange, where the stock is listed
-        symbol = etree.xpath('.//a[@data-reactid][@title][@class=""]')[0].text_content()
-        logger.debug("Stock symbol for ISIN %s: %s" % (isin, symbol))
-        return symbol
+    xpath_table = '//*[@id="lookup-page"]/section/div/div/div/div/table/tbody'
+    lookup_url = "https://de.finance.yahoo.com/lookup?s=%s" % name
+    etree = common.url_to_etree(lookup_url)
+    # TODO using the same query we can easily find out the stock exchange, where the stock is listed
+    for elem in etree.xpath(xpath_table + '/tr'):
+        symbol = elem.xpath('./td[1]')[0].text_content().encode("utf-8").decode("utf-8")
+        loc_found = elem.xpath('./td[6]')[0].text_content().encode("utf-8").decode("utf-8")
+        if loc_found == loc:
+            logger.debug("Stock symbol for Name '%s': %s" % (name, symbol))
+            return symbol, loc_found
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    print(get_stock_info("VOW.DE"))
-    print(lookupSymbol("DE0008404005"))
+    # print(get_stock_info("VOW.DE"))
+    print(lookupSymbol(name="volkswagen-ag-st-o.n.", loc="BER"))

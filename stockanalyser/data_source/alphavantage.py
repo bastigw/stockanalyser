@@ -57,27 +57,28 @@ def getPageAlpha(search):
     return json_response_page
 
 
-def findCurrency(json_response_page, currency=None, markt=None):
+def findCurrency(json_response_page, currency=None, region=None):
     if currency is None:
         currency = 'EUR'
-    if markt is None:
-        markt = "Frankfurt"
+    if region is None:
+        region = "Frankfurt"
     loaded_json = json.loads(json_response_page)
     try:
         loaded_json = loaded_json["bestMatches"]
         for data in loaded_json:
-            if currency in data["8. currency"] and markt in data["4. region"]:
+            if currency in data["8. currency"] and region in data["4. region"]:
                 return data["1. symbol"]
                 break
             else:
                 continue
+        return None
     except KeyError as err:
-        raise ValueError('Data isn´t correct. Check inputs!')
+        return None
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    r = stock_quote("FRA:VOW", (datetime.datetime.now() -
-                                datetime.timedelta(days=1)).date())
-    print(r)
-    print(findCurrency(getPageAlpha("")))
+    # r = stock_quote("FRA:VOW", (datetime.datetime.now() -
+    #                             datetime.timedelta(days=1)).date())
+    # print(r)
+    print(findCurrency(getPageAlpha("Volkswagen"), currency='EUR', region='Frankfurt'))
