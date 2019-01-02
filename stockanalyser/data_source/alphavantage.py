@@ -1,9 +1,8 @@
-import urllib.request
-import logging
-import json
 import datetime
-import time
-from stockanalyser.exceptions import InvalidValueError
+import json
+import logging
+import urllib.request
+
 from stockanalyser.data_source import common
 
 logger = logging.getLogger(__name__)
@@ -19,33 +18,46 @@ class EmptyStockDataResponse(Exception):
 
 
 def stock_quote(symbol, date):
-    assert date.weekday() not in (6, 7)
-    str_date = date.strftime("%Y/%m/%d")
+    date_difference = common._date_difference(date)
+    date = date.strftime("%Y-%m-%d")
     if symbol not in cache:
+        outputsize = "&outputsize=full" if date_difference >= 100 else ""
         url = (BASE_URL + "?function=TIME_SERIES_DAILY_ADJUSTED&apikey=" + API_KEY +
-               "&outputsize=full" +
+               outputsize +
                "&symbol=" + symbol)
-        logger.debug("Retrieving stock quote for '%s' on %s (%s)" % (symbol, date,
-                                                                     url))
-        # TODO: only use outputsize=full if older than the last 100day quotes are
-        # requested
-        r = urllib.request.urlopen(url).read()
-        r_json = json.loads(r.decode("utf-8"))
+        logger.debug("Retrieving closing stock quote for '%s' on %s (%s)" % (symbol, date,
+                                                                             url))
+        page_av = urllib.request.urlopen(url).read()
+        r_json = json.loads(page_av.decode("utf-8"))
+        cache[symbol] = r_json
+    elif cache[symbol]["Time Series (Daily)"].__len__() <= date_difference:
+        url = (BASE_URL + "?function=TIME_SERIES_DAILY_ADJUSTED&apikey=" + API_KEY +
+               "&outputsize=full&symbol=" + symbol)
+        logger.debug("Retrieving full closing stock quote for '%s' on %s (%s)" % (symbol, date,
+                                                                                  url))
+        page_av = urllib.request.urlopen(url).read()
+        r_json = json.loads(page_av.decode("utf-8"))
         cache[symbol] = r_json
     else:
         logger.debug("Retrieving stock quote for '%s' on %s from cache" %
                      (symbol, date))
         r_json = cache[symbol]
 
-    f = float(r_json["Time Series (Daily)"][str(date)]["4. close"])
-    logger.debug("stock quote for '%s' on %s: %s" % (symbol, date, f))
-    if f == 0.0:
-        raise InvalidValueError("Stock Quote from alphavantage is invalid (0) "
-                                "data: %s" %
-                                r_json["Time Series (Daily)"][str(date)]
-                                ["4.  close"])
+    value_daily_close = float(r_json["Time Series (Daily)"][str(date)]["4. close"])
+    logger.debug("Closing stock quote for '%s' on %s: %s" % (symbol, date, value_daily_close))
+    if value_daily_close == 0.0:  # Change date and try again
+        date += datetime.timedelta(days=-1)
+        if date.isoweekday() in set((6, 7)):
+            date += datetime.timedelta(days=(8 - date.isoweekday()))
+            stock_quote(symbol, date)
+        else:
+            stock_quote(symbol, date)
+        # raise InvalidValueError("Stock Quote from alphavantage is invalid (0) "
+        #                         "data: %s" %
+        #                         r_json["Time Series (Daily)"][str(date)]
+        #                         ["4.  close"])
 
-    return f
+    return value_daily_close
 
 
 def getPageAlpha(search):
@@ -78,7 +90,7 @@ def findCurrency(json_response_page, currency=None, region=None):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    # r = stock_quote("FRA:VOW", (datetime.datetime.now() -
-    #                             datetime.timedelta(days=1)).date())
-    # print(r)
-    print(findCurrency(getPageAlpha("Volkswagen"), currency='EUR', region='Frankfurt'))
+    # r = stock_quote("VOW.DE", (datetime.datetime.now() -
+    #                            datetime.timedelta(days=99)))
+    # r = stock_quote("VOW.DE", (datetime.datetime.now() -
+    #                            datetime.timedelta(days=101)))

@@ -1,14 +1,17 @@
-import logging
 import calendar
+import datetime
+import logging
 import pickle
 from datetime import date, timedelta
-import datetime
-from stockanalyser.data_source import yahoo, alphavantage
-from stockanalyser.exceptions import NotSupportedError, InvalidValueError
-from stockanalyser.config import *
-from stockanalyser import fileutils
-from stockanalyser.stock import Cap
 from enum import Enum, unique
+
+from stockanalyser import fileutils
+from stockanalyser.analysis import levernann_result
+from stockanalyser.config import *
+from stockanalyser.data_source import alphavantage
+from stockanalyser.exceptions import NotSupportedError
+from stockanalyser.stock import Cap
+from stockanalyser.stock import Stock
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +27,8 @@ def is_weekday(adate):
 
 
 def prev_weekday(adate):
-        _offsets = (3, 1, 1, 1, 1, 1, 2)
-        return adate - timedelta(days=_offsets[adate.weekday()])
+    _offsets = (3, 1, 1, 1, 1, 1, 2)
+    return adate - timedelta(days=_offsets[adate.weekday()])
 
 
 def closest_weekday(adate):
@@ -58,125 +61,25 @@ class CriteriaRating(object):
 @unique
 class Recommendation(Enum):
     BUY = 1
-    SELL = 2
-    NONE = 3
-
-
-class LevermannResult(object):
-    def __init__(self):
-        self.timestamp = datetime.datetime.now()
-
-        self.roe = None
-        self.equity_ratio = None
-        self.ebit_margin = None
-        self.earning_growth = None
-        self.three_month_reversal = None
-        self.momentum = None
-        self.quote_chg_6month = None
-        self.quote_chg_1year = None
-        self.earning_revision = None
-        self.quarterly_figures_reaction = None
-        self.analyst_rating = None
-        self.five_years_price_earnings_ratio = None
-        self.price_earnings_ratio = None
-        self._score = None
-
-    def __str__(self):
-        s = "{:<35} {:<25}\n".format("Last Evaluation Date:", "%s" %
-                                     self.timestamp)
-        s += "\n"
-        s += "{:<35} {:<25} | {} Points\n".format("RoE:",
-                                                  "%s%%" % self.roe.value,
-                                                  self.roe.points)
-        s += "{:<35} {:<25} | {} Points\n".format("Equity Ratio:", "%s%%" %
-                                                  self.equity_ratio.value,
-                                                  self.equity_ratio.points)
-        s += "{:<35} {:<25} | {} Points\n".format("EBIT Margin:", "%s%%" %
-                                                  self.ebit_margin.value,
-                                                  self.ebit_margin.points)
-        s += "{:<35} {:<25} | {} Points\n".format("%s vs. %s Earning growth:" %
-                                                  (THIS_YEAR, THIS_YEAR + 1),
-                                                  "%.2f%%" %
-                                                  self.earning_growth.value,
-                                                  self.earning_growth.points)
-        if self.three_month_reversal.value[::-1][0] != None:
-            s += "{:<35} {:<25} | {} Points\n".format("3 month reversal:",
-                                                      "%.2f%%, %.2f%%, %.2f%%" %
-                                                      self.three_month_reversal.value[::-1],
-                                                      self.three_month_reversal.points)
-        s += "{:<35} {:<25} | {} Points\n".format("Stock momentum (6m,"
-                                                  "1y chg points):",
-                                                  "%s Points, %s Points" %
-                                                  self.momentum.value,
-                                                  self.momentum.points)
-        s += "{:<35} {:<25} | {} Points\n".format("6 month quote movement:",
-                                                  "%.2f%%" %
-                                                  self.quote_chg_6month.value,
-                                                  self.quote_chg_6month.points)
-        s += "{:<35} {:<25} | {} Points\n".format("1 year quote movement:",
-                                                  "%.2f%%" %
-                                                  self.quote_chg_1year.value,
-                                                  self.quote_chg_1year.points)
-        s += "{:<35} {:<25} | {} Points\n".format("Earning revision "
-                                                  "(6m, 1y points):",
-                                                  "%s Points, %s Points" %
-                                                  self.earning_revision.value,
-                                                  self.earning_revision.points)
-        s += "{:<35} {:<25} | {} Points\n".format("Quarterly figures release"
-                                                  " reaction:",
-                                                  "%.2g%%" %
-                                                  self.quarterly_figures_reaction.value,
-                                                  self.quarterly_figures_reaction.points)
-        s += "{:<35} {:<25} | {} Points\n".format("Yahoo analyst rating",
-                                                  str(self.analyst_rating.value or ""),
-                                                  self.analyst_rating.points)
-        s += "{:<35} {:<25.2f} | {} Points\n".format("Price earnings ratio",
-                                                     self.price_earnings_ratio.value,
-                                                     self.price_earnings_ratio.points)
-        s += "{:<35} {:<25.2f} | {} Points\n".format("5y price earnings ratio",
-                                                     self.five_years_price_earnings_ratio.value,
-                                                     self.five_years_price_earnings_ratio.points)
-        s += "\n"
-
-        s += "{:<35} {:<25} | {} Points\n".format("Total Levermann Score:",
-                                                  "", self.score)
-
-        return s
-
-    @property
-    def score(self):
-        if self._score is None:
-            self._score = (self.roe.points + self.equity_ratio.points +
-                           self.ebit_margin.points +
-                           self.earning_growth.points +
-                           self.three_month_reversal.points +
-                           self.momentum.points +
-                           self.quote_chg_6month.points +
-                           self.quote_chg_1year.points +
-                           self.earning_revision.points +
-                           self.quarterly_figures_reaction.points +
-                           self.analyst_rating.points +
-                           self.five_years_price_earnings_ratio.points +
-                           self.price_earnings_ratio.points)
-        return self._score
+    HOLD = 2
+    SELL = 3
 
 
 def levermann_pickle_path(symbol, dir=DATA_PATH):
-        filename = fileutils.to_pickle_filename(symbol + ".levermann")
-        path = os.path.join(dir, filename)
-        return path
+    filename = fileutils.to_pickle_filename(symbol + ".levermann")
+    path = os.path.join(dir, filename)
+    return path
 
 
 def unpickle_levermann_sym(symbol, dir=DATA_PATH):
-        path = levermann_pickle_path(symbol)
-        return unpickle_levermann(path)
+    path = levermann_pickle_path(symbol)
+    return unpickle_levermann(path)
 
 
 def unpickle_levermann(path):
-        l = pickle.load(open(path, "rb"))
-        logger.debug("Unpickled Levermann Analysis for Stock: %s from '%s'" %
-                     (l.stock.symbol, path))
-        return l
+    l = pickle.load(open(path, "rb"))
+    logger.debug("Unpickled Levermann Analysis for Stock: {} from '{}'".format(l.stock.symbol, path))
+    return l
 
 
 class EvaluationResult(object):
@@ -201,18 +104,16 @@ class Levermann(object):
                                     " The stock symbol has to end in .de")
 
     def evaluate(self):
-        logger.info("Creating Levermann Analysis for %s" % self.stock.symbol)
-        result = LevermannResult()
+        logger.info("Creating Levermann Analysis for {}".format(self.stock.symbol))
+        result = levernann_result.LevermannResult(name=self.stock.name)
 
         result.roe = self.eval_roe()
         result.ebit_margin = self.eval_ebit_margin()
         result.equity_ratio = self.eval_equity_ratio()
         result.price_earnings_ratio = self.eval_price_earnings_ratio()
-        result.five_years_price_earnings_ratio = \
-            self.eval_five_years_price_earnings_ratio()
+        result.five_years_price_earnings_ratio = self.eval_five_years_price_earnings_ratio()
         result.analyst_rating = self.eval_analyst_rating()
-        result.quarterly_figures_reaction = \
-            self.eval_quarterly_figures_reaction()
+        result.quarterly_figures_reaction = self.eval_quarterly_figures_reaction()
 
         result.quote_chg_6month = self.eval_quote_chg_6month()
         result.quote_chg_1year = self.eval_quote_chg_1year()
@@ -226,7 +127,7 @@ class Levermann(object):
         if self.evaluation_results:
             last = self.evaluation_results[-1]
             if ((last.timestamp > (datetime.datetime.now() -
-                 datetime.timedelta(days=7))) and last.score == result.score):
+                                   datetime.timedelta(days=7))) and last.score == result.score):
                 logger.debug("Old Levermann analysis:\n%s\n"
                              "New Levermann anylsis: \n%s" %
                              (str(last), str(result)))
@@ -237,7 +138,7 @@ class Levermann(object):
 
         self.evaluation_results.append(result)
 
-        return True
+        return result, True
 
     def outdated(self):
         if not self.evaluation_results:
@@ -251,10 +152,10 @@ class Levermann(object):
 
     def eval_earning_growth(self):
         logger.debug("Evaluating earning growth")
-        #TODO: ensure that eps is always sorted in stock
+        # Sorted! Uses dict to get amount
 
-        eps_cur_year = self.stock.eps[THIS_YEAR][-1].value
-        eps_next_year = self.stock.eps[THIS_YEAR + 1][-1].value
+        eps_cur_year = self.stock.eps[THIS_YEAR]
+        eps_next_year = self.stock.eps[THIS_YEAR + 1]
 
         chg = ((eps_next_year.amount / eps_cur_year.amount) - 1) * 100
         logger.debug("EPS current year: %s\n"
@@ -287,7 +188,7 @@ class Levermann(object):
 
         ref_quote = alphavantage.stock_quote(self.reference_index, d)
         prev_ref_quote = alphavantage.stock_quote(self.reference_index,
-                                           prev_month_date)
+                                                  prev_month_date)
         ref_q_diff = ((ref_quote / prev_ref_quote) - 1) * 100
 
         logger.debug("Comparing Stock with reference index. "
@@ -312,7 +213,7 @@ class Levermann(object):
         d = prev_month(d)
         m3_diff = self._calc_ref_index_comp(d)
 
-        if (m1_diff > 0 and m2_diff > 0 and m3_diff > 0):
+        if m1_diff > 0 and m2_diff > 0 and m3_diff > 0:
             points = -1
         elif (m1_diff < 0 and m2_diff < 0 and m3_diff < 0):
             points = 1
@@ -356,16 +257,8 @@ class Levermann(object):
 
         return CriteriaRating(chg, points)
 
-    def _calc_eps_chg(self, eps_list):
-        assert len(eps_list) >= 2
-        latest = eps_list[-1]
-        other = eps_list[-2]
-        logger.debug("EPS vals: latest: %s, other: %s" % (latest, other))
-
-        return ((latest.value.amount / other.value.amount) - 1) * 100
-
     def _calc_earning_rev_points(self, chg):
-        if chg >= -5 and chg <= 5:
+        if -5 <= chg <= 5:
             return 0
         elif chg > 5:
             return 1
@@ -373,14 +266,11 @@ class Levermann(object):
             return -1
 
     def eval_earning_revision(self):
-        cur_year_eps = self.stock.eps[THIS_YEAR]
-        next_year_eps = self.stock.eps[THIS_YEAR + 1]
+        cur_year_eps = self.stock.eval_earning_revision_cy
+        next_year_eps = self.stock.eval_earning_revision_ny
 
-        if len(cur_year_eps) < 2 or len(next_year_eps) < 2:
-            return CriteriaRating((None, None), 0)
-
-        cur_year_chg = self._calc_eps_chg(cur_year_eps)
-        next_year_chg = self._calc_eps_chg(next_year_eps)
+        cur_year_chg = cur_year_eps['Change current Year']
+        next_year_chg = next_year_eps['Change next Year']
 
         cur_year_points = self._calc_earning_rev_points(cur_year_chg)
         next_year_points = self._calc_earning_rev_points(next_year_chg)
@@ -403,13 +293,13 @@ class Levermann(object):
         qf_prev_day = prev_weekday(self.stock.last_quarterly_figures_release_date())
 
         qf_previous_day_quote = alphavantage.stock_quote(self.stock.symbol,
-                                                  qf_prev_day)
+                                                         qf_prev_day)
         qf_day_quote = alphavantage.stock_quote(self.stock.symbol, qf_date)
         qf_reaction = ((qf_day_quote / qf_previous_day_quote) - 1) * 100
 
         ref_index_quote = alphavantage.stock_quote(self.reference_index, qf_date)
         ref_previous_index_quote = alphavantage.stock_quote(self.reference_index,
-                                                     qf_prev_day)
+                                                            qf_prev_day)
         ref_index_chg = (((ref_index_quote / ref_previous_index_quote) - 1) *
                          100)
 
@@ -439,37 +329,36 @@ class Levermann(object):
         return CriteriaRating(rel_qf_reaction, points)
 
     def eval_analyst_rating(self):
-        if (self.stock.analyst_ratings[0] is None or
-            self.stock.analyst_ratings[1] is None or
-            self.stock.analyst_ratings[2] is None):
-            logger.debug("No analyst rating available")
+
+        analyst_ratings = self.stock.consensus_ratings
+        if not analyst_ratings:
             return CriteriaRating(None, 0)
+        logger.debug("Analyst ratings: %s" % str(analyst_ratings))
+        consensus = analyst_ratings["consensus"]
+        number_of_analysts = int(analyst_ratings["n_of_analysts"])
+        ratings = {
+            "KAUFEN": 1,
+            "AUFSTOCKEN": 2,
+            "HALTEN": 3,
+            "REDUZIEREN": 4,
+            "VERKAUFEN": 5
+        }
 
-        ratings = self.stock.analyst_ratings
-        logger.debug("Analyst ratings: %s" % str(ratings))
-        score = (((ratings[0] * 1) + (ratings[1] * 2) + (ratings[2] * 3)) /
-                 (float(ratings[0]) + ratings[1] + ratings[2]))
+        score = ratings[consensus]
 
-        logger.debug("Analyst score: %s" % score)
+        logger.debug("Analyst score: %s" % consensus)
 
-        # for small caps with less than 5 ratings, the recommendations are
-        # followed
-        if (self.stock.cap_type == Cap.SMALL and
-            (ratings[0] + ratings[1] + ratings[2]) < 5):
-            if score >= 1 and score <= 1.5:
-                points = 1
-            if score > 1.5 and score < 2.5:
-                points = 0
-            if score >= 2.5:
-                points = -1
+        if score == 2 or score == 1:
+            points = -1
+        elif score == 3:
+            points = 0
+        elif score == 4 or score == 5:
+            points = 1
         else:
-        # for other stocks the recommendation is inverted
-            if score >= 1 and score <= 1.5:
-                points = -1
-            if score > 1.5 and score < 2.5:
-                points = 0
-            if score >= 2.5:
-                points = 1
+            raise ValueError("Wrong Type")
+
+        if number_of_analysts >= 5:
+            points = points * -1
 
         return CriteriaRating(score, points)
 
@@ -581,9 +470,7 @@ class Levermann(object):
             pickle.dump(self, f)
 
     def short_summary_header(self):
-        s = ("| {:<25} | {:<14} | {:<14} | {:<6} |".\
-                format("Name", "Prev Score (Date)", "Last Score (Date)",
-                       "Advise"))
+        s = ("| {:<25} | {:<14} | {:<14} | {:<6} |".format("Name", "Prev Score (Date)", "Last Score (Date)", "Advise"))
         s += "\n"
         s += "-" * 78
         return s
@@ -603,9 +490,7 @@ class Levermann(object):
 
         r_ts = r.timestamp.strftime("%x")
 
-        s = ("| {:<25} | {:<6} ({:<8}) | {:<6} ({:<8}) | {:<6} |".\
-                format(self.stock.name, r_prev_score,
-                       r_prev_ts, r.score, r_ts, self.recommendation().name))
+        s = ("| {:<25} | {:<6} ({:<8}) | {:<6} ({:<8}) | {:<6} |".format(self.stock.name, r_prev_score, r_prev_ts, r.score, r_ts, self.recommendation().name))
 
         return s
 
@@ -621,8 +506,8 @@ class Levermann(object):
 
     def recommendation(self):
         if (len(self.evaluation_results) >= 2 and
-            (self.evaluation_results[-1].score -
-             self.evaluation_results[-2].score) <= -2):
+                (self.evaluation_results[-1].score -
+                 self.evaluation_results[-2].score) <= -2):
             return Recommendation.SELL
 
         if self.stock.cap_type == Cap.LARGE:
@@ -641,26 +526,27 @@ class Levermann(object):
 
 
 if __name__ == "__main__":
-    from pprint import pprint
-    from stockanalyser.stock import Stock
-    """"
     logging.basicConfig(level=logging.DEBUG)
-    s = Stock("VOW.DE")
-    s.onvista_fundamental_url = "http://www.onvista.de/aktien/Volkswagen-ST-Aktie-DE0007664005"
-    s.finanzen_net_url = "http://www.finanzen.net/termine/Volkswagen"
+
+    s = Stock(name="rational")
+    # # s.onvista_fundamental_url = "http://www.onvista.de/aktien/Volkswagen-ST-Aktie-DE0007664005"
+    # # s.finanzen_net_url = "http://www.finanzen.net/termine/Volkswagen"
     s.update_stock_info()
     leverman = Levermann(stock=s)
-    pprint(leverman.evaluate())
-    """
-    
-    s = Stock("SIE.DE")
-    s.onvista_fundamental_url = "http://www.onvista.de/aktien/Siemens-Aktie-DE0007236101"
-    s.finanzen_net_url = "http://www.finanzen.net/termine/Siemens"
-    s.update_stock_info()
-    leverman = Levermann(stock=s)
-    pprint(leverman.evaluate())
+    # leverman.evaluate()
+    result = leverman.evaluate()[0]
+    print(result)
 
+    # print(s)
+    # s = Stock(symbol="SIE.DE", isin="DE0007236101")
+    # # s.onvista_fundamental_url = "http://www.onvista.de/aktien/Siemens-Aktie-DE0007236101"
+    # # s.finanzen_net_url = "http://www.finanzen.net/termine/Siemens"
+    # s.update_stock_info()
+    # print(s)
+    # leverman = Levermann(stock=s)
+    # pprint(leverman.evaluate())
+    # print(leverman)
 
-    s2 = Stock("MUV2.DE")
-    s2.onvista_fundamental_url = "http://www.onvista.de/aktien/Muenchener-Rueck-Aktie-DE0008430026"
-    s2.update_stock_info()
+    # s2 = Stock("MUV2.DE")
+    # s2.onvista_fundamental_url = "http://www.onvista.de/aktien/Muenchener-Rueck-Aktie-DE0008430026"
+    # s2.update_stock_info()

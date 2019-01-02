@@ -1,16 +1,13 @@
-import lxml.html
-import re
-from decimal import Decimal
-from stockanalyser.mymoney import Money
 import logging
-from stockanalyser.data_source import common
+import re
+import urllib.request
+from decimal import Decimal
 
+from stockanalyser import exceptions
+from stockanalyser.data_source import common
+from stockanalyser.mymoney import Money
 
 logger = logging.getLogger(__name__)
-
-
-class ParsingError(Exception):
-    pass
 
 
 def is_number(txt):
@@ -22,13 +19,33 @@ def is_number(txt):
 
 
 class OnvistaScraper(object):
-    def __init__(self, url):
-        self.overview_url = url
-        self.fundamental_url = self._build_fundamental_url(url)
-        self.fundamental_etree = None
+    def __init__(self, url=None, isin=None):
+        if not url and isin:
+            self.ISIN = isin
+            self.lookup_url()
+        elif not (url and isin):
+            raise exceptions.MissingDataError("Not enough Inputs! Check function call!")
+        elif url:
+            self.overview_url = url
 
-        self.fetch_fundamental_webpage()
+        self.overview_etree = None
         self.fetch_overview_webpage()
+
+        self.fundamental_url = self._build_fundamental_url(self.overview_url)
+        self.fundamental_etree = None
+        self.fetch_fundamental_webpage()
+
+    def lookup_url(self):
+        url_base = 'https://www.onvista.de/aktien/'
+        url_base_redirect = url_base + self.ISIN
+        http_request = urllib.request.Request(url_base_redirect)
+        http_respnse = urllib.request.urlopen(http_request)
+        if (url_base and self.ISIN) in http_respnse.url:
+            self.overview_url = http_respnse.url
+            self.overview_etree = common.str_to_etree(response=http_respnse)
+            return self.overview_url
+        elif url_base not in http_respnse.url:
+            raise ValueError("Couldn't find Onvista Url")
 
     def _build_fundamental_url(self, url):
         spl = url.split("/")
@@ -60,7 +77,7 @@ class OnvistaScraper(object):
         hold = self._get_analyst_rating(hold_xpath)
         sell = self._get_analyst_rating(sell_xpath)
 
-        return (buy, hold, sell)
+        return buy, hold, sell
 
     def _get_table_header(self, header):
         # onvista uses 2 different presentation for the year:
@@ -101,7 +118,7 @@ class OnvistaScraper(object):
         res = self.fundamental_etree.findall(table_xpath)
         theader = self._get_table_header(res)
         if theader[0] != table_header:
-            raise ParsingError("Unexpected table header: '%s'" % theader[0])
+            raise exceptions.ParsingError("Unexpected table header: '%s'" % theader[0])
 
         res = self.fundamental_etree.findall(row_xpath)
         rows = []
@@ -117,13 +134,13 @@ class OnvistaScraper(object):
             rows.append(v)
 
         if rows[0] != row_header:
-            raise ParsingError("Unexpected 1. row header: '%s' != '%s'" %
-                               (rows[0], row_header))
+            raise exceptions.ParsingError("Unexpected 1. row header: '%s' != '%s'" %
+                                          (rows[0], row_header))
 
         if len(theader) != len(rows):
-            raise ParsingError("Parsing error, table header contains more"
-                               " elements than rows:"
-                               "'%s' vs '%s'" % (theader, rows))
+            raise exceptions.ParsingError("Parsing error, table header contains more"
+                                          " elements than rows:"
+                                          "'%s' vs '%s'" % (theader, rows))
 
         result = {}
         for i in range(len(rows)):
@@ -173,11 +190,12 @@ class OnvistaScraper(object):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    o = OnvistaScraper("http://www.onvista.de/aktien/Bayer-Aktie-DE000BAY0017")
-    print(o.analyst_ratings())
-    print("ROE: %s" % o.roe())
-    print("EPS: %s" % o.eps())
-    print("EBIT-MARGIN: %s" % o.ebit_margin())
-    print("EQUITY RATIO: %s" % o.equity_ratio())
-    print(o.fetch_fundamental_webpage())
-    print(o.fetch_overview_webpage())
+    o = OnvistaScraper(isin="DE000BAY0017")
+    print(o.overview_url)
+    # print(o.analyst_ratings())
+    # print("ROE: %s" % o.roe())
+    # print("EPS: %s" % o.eps())
+    # print("EBIT-MARGIN: %s" % o.ebit_margin())
+    # print("EQUITY RATIO: %s" % o.equity_ratio())
+    # print(o.fetch_fundamental_webpage())
+    # print(o.fetch_overview_webpage())

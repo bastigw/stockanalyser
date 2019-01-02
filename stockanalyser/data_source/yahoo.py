@@ -1,57 +1,11 @@
-import urllib.request
-import urllib.parse
-import logging
 import json
-import datetime
-import time
+import logging
+import urllib.parse
+import urllib.request
+
 from stockanalyser.data_source import common
 
 logger = logging.getLogger(__name__)
-
-
-class EmptyStockDataResponse(Exception):
-    pass
-
-
-YQL_BASE_URL = "http://query.yahooapis.com/v1/public/yql?"
-
-
-def get_yql_result(params):
-    params = urllib.parse.urlencode(params)
-    url = YQL_BASE_URL + params
-
-    tries = 0
-    wait_sec = 2
-    resp = None
-
-    while resp is None:
-        req = urllib.request.Request(url)
-        try:
-            logger.debug("Fetching Yahoo stock data from '%s'" % url)
-            resp = urllib.request.urlopen(req).read()
-            tries += 1
-
-            logger.debug("Got Yahoo stock data response: '%s'" % resp)
-            res = json.loads(resp.decode("utf-8"))
-            if (int(res["query"]["count"]) == 0 or
-                    ("Name" in res["query"]["results"]["quote"] and
-                     not res["query"]["results"]["quote"]["Name"])):
-                raise EmptyStockDataResponse("Stock data from Yahoo doesn't"
-                                             " contain values. Invalid Stock"
-                                             " Symbol? For non US-Stocks a"
-                                             " country prefix has to be added"
-                                             " to the stock symbol. Received"
-                                             " Response: '%s'" % res)
-            return res["query"]["results"]["quote"]
-
-        except (urllib.error.HTTPError, EmptyStockDataResponse) as e:
-            resp = None
-            if tries < 1:
-                logger.error("Fetching yahoo YQL Stock Data failed, retrying"
-                             " in %s seconds..." % wait_sec)
-                time.sleep(wait_sec)
-            else:
-                raise e
 
 
 def get_stock_info(symbol):
@@ -71,34 +25,56 @@ def get_stock_info(symbol):
     data = json.loads(jsonstr)
     market_cap = data['context']['dispatcher']['stores']['QuoteSummaryStore']['summaryDetail']['marketCap']['raw']
     prev_close = data['context']['dispatcher']['stores']['QuoteSummaryStore']['summaryDetail']['previousClose']['raw']
+    prev_close = round(prev_close, 2)
     currency = data['context']['dispatcher']['stores']['QuoteSummaryStore']['summaryDetail']['currency']
     name = data['context']['dispatcher']['stores']['QuoteSummaryStore']['price']['shortName']
 
-    res = {}
-    res["Name"] = name
-    res["PreviousClose"] = prev_close
-    res["Currency"] = currency
-    res["MarketCapitalization"] = int(market_cap)
+    res = {"Name": name,
+           "PreviousClose": prev_close,
+           "Currency": currency,
+           "MarketCapitalization": int(market_cap)
+           }
 
     return res
 
-def lookupSymbol(name, loc = None):
+
+def lookup_symbol(name, loc=None):
     if loc is None:
         loc = 'GER'
 
-    xpath_table = '//*[@id="lookup-page"]/section/div/div/div/div/table/tbody'
+    xpath_table = '//*[@id="lookup-page"]/section/div/div/div/div/table/tbody/tr'
     lookup_url = "https://de.finance.yahoo.com/lookup?s=%s" % name
     etree = common.url_to_etree(lookup_url)
-    # TODO using the same query we can easily find out the stock exchange, where the stock is listed
-    for elem in etree.xpath(xpath_table + '/tr'):
+    for elem in etree.xpath(xpath_table):
         symbol = elem.xpath('./td[1]')[0].text_content().encode("utf-8").decode("utf-8")
         loc_found = elem.xpath('./td[6]')[0].text_content().encode("utf-8").decode("utf-8")
+        name = elem.xpath('./td[2]')[0].text_content().encode("utf-8").decode("utf-8")
+        if "vz" in name.lower():
+            continue
         if loc_found == loc:
+            exchange = __switch_exchange(loc_found)
             logger.debug("Stock symbol for Name '%s': %s" % (name, symbol))
-            return symbol, loc_found
+            return symbol, exchange, name
+
+
+""" Dictionary that returns exchange with location as input """
+
+
+def __switch_exchange(loc_found):
+    exchange = {
+        'GER': 'XETRA',
+        'BER': 'Berlin',
+        'FRA': 'Frankfurt',
+        'HAM': 'Hamburg'
+    }
+    if loc_found in exchange:
+        return exchange[loc_found]
+    else:
+        logger.debug("Didn't find Exchange for Location: %s " % loc_found)
+        return loc_found
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     # print(get_stock_info("VOW.DE"))
-    print(lookupSymbol(name="volkswagen-ag-st-o.n.", loc="BER"))
+    print(lookup_symbol(name="volkswagen-ag")[0])

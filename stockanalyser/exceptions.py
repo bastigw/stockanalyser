@@ -4,3 +4,15 @@ class NotSupportedError(Exception):
 
 class InvalidValueError(Exception):
     pass
+
+
+class UnknownIndexError(Exception):
+    pass
+
+
+class MissingDataError(Exception):
+    pass
+
+
+class ParsingError(Exception):
+    pass
