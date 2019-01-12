@@ -7,7 +7,7 @@ from stockanalyser.data_source import common
 
 logger = logging.getLogger(__name__)
 
-API_KEY = "7MU4HCSA2Y0BWMJP"
+API_KEY = "YOUR_API_KEY"
 BASE_URL = "http://www.alphavantage.co/query"
 BASE_SEARCH_URL = 'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords='
 cache = {}
