@@ -1,47 +1,62 @@
-import datetime
-import urllib.request
-import numpy as np
-import pathlib
+"""
+common.py
 
-import lxml.etree
-import lxml.html
+Functions that are used by all modules in this package!
+
+"""
+
+import datetime
+import asyncio
+import time
+import urllib.request
+import pathlib
+import numpy as np
+from typing import Union
+from lxml import html
 import logging
 
 logger = logging.getLogger(__name__)
 
+SLEEP = 10
 
-def url_to_etree(url):
+url_last = ''
+
+""" All request and HTML-Element handling """
+
+
+async def request_cooldown():
+    await asyncio.sleep(SLEEP)
+
+
+def url_to_etree(url: str):
+    """ Takes url and returns a lxml etree object"""
     return str_to_etree(request_url_to_str(url))
 
 
-def request_url_to_str(url):
+def request_url_to_str(url: str):
     req = urllib.request.Request(url)
     req.add_header('User-Agent', get_random_ua())
     logger.debug("Fetching webpage '%s'" % url)
-    resp = urllib.request.urlopen(req).read()
-    return resp
+    try:
+        resp = urllib.request.urlopen(req).read()
+        return resp
+    except (urllib.request.HTTPError) as httperr:
+        logger.exception("HTTPError: {}. ".format(httperr.code))
+        # logger.exception(httperr)
+        logger.warning("Sleeping for {} seconds. Website {} returned with "
+                       "error code {}!".format(SLEEP, url.split("/")[2],
+                                               httperr.code))
+        request_cooldown()
+        request_url_to_str(url)
 
 
 def str_to_etree(response_read):
     logger.debug("Parsing string to etree")
-    return lxml.html.fromstring(response_read)
-
-
-def german_date_to_normal(date, str_format):
-    replacements = {
-        "ä": "a",
-        "i": "y",
-        "k": "c",
-        "z": "c"
-    }
-
-    for old, new in replacements.items():
-        date = date.replace(old, new)
-    dt = datetime.datetime.strptime(date, str_format)
-    return dt
+    return html.fromstring(response_read)
 
 
 def get_random_ua():
+    """ Takes random User Agent from file """
     random_ua = ''
     ua_file = pathlib.Path(__file__).parent / 'ua_file.txt'
     try:
@@ -60,6 +75,29 @@ def get_random_ua():
         return random_ua
 
 
+def solve_xpath(etree: html, xpath: str):
+    element = etree.xpath(xpath)
+    # element = element.
+    return element
+
+
+"""Date calculation and formatting"""
+
+
+def german_date_to_normal(date, str_format):
+    replacements = {
+        "ä": "a",
+        "i": "y",
+        "k": "c",
+        "z": "c"
+    }
+
+    for old, new in replacements.items():
+        date = date.replace(old, new)
+    dt = datetime.datetime.strptime(date, str_format)
+    return dt
+
+
 def date_difference(date_start, date_end=None):
     """
     Calculate date difference between dates
@@ -68,8 +106,7 @@ def date_difference(date_start, date_end=None):
     :param date_end: If None = Today, else newer date
     :return: int of date difference
     """
-    if date_start.isoweekday() not in (6, 7):
-        # print(date_start.weekday)
+    if not is_weekday(date_start):
         date_start = prev_weekday(date_start)
     if not date_end:
         date_end = datetime.datetime.now()
@@ -83,29 +120,61 @@ def date_difference(date_start, date_end=None):
     raise ValueError("date_start is not valid: {}".format(date_start))
 
 
-def is_weekday(adate):
-    if adate.weekday() in (5, 6):
-        return False
-    return True
+def is_weekday(adate: Union[str, datetime.datetime, datetime.date]) -> bool:
+    """Test if Date is weekday
+
+    :param adate: Date string or datetime object
+    """
+    adate = convert_to_datetime(adate)
+    if adate.isoweekday() not in (6, 7):
+        return True
+    return False
 
 
-def prev_weekday(adate):
-    _offsets = (3, 1, 1, 1, 1, 1, 2)
-    return adate - datetime.timedelta(days=_offsets[adate.weekday()])
+def prev_weekday(adate: Union[str, datetime.datetime, datetime.date]):
+    """ Previous Weekday """
+    if adate is not None:
+        if isinstance(adate, str):
+            adate = convert_to_datetime(adate)
+        _offset = (3, 1, 1, 1, 1, 1, 2)[adate.isoweekday() - 1]
+        return adate - datetime.timedelta(days=_offset)
 
 
 def closest_weekday(adate):
-    if adate.weekday() == 6:
+    """ Closest Weekday:
+
+            * Saturday -> Friday before
+            * Sunday -> Monday after
+    :return: datetime
+        """
+    if adate.isoweekday() == 7:
         return adate + datetime.timedelta(days=1)
-    elif adate.weekday() == 5:
+    elif adate.isoweekday() == 6:
         return adate - datetime.timedelta(days=1)
     return adate
 
 
+def convert_to_datetime(adate):
+    """ Turns anything (nearly) into datetime obj"""
+    if isinstance(adate, str):
+        try:
+            return datetime.datetime.strptime(adate, "%d.%m.%Y")
+        except ValueError as e:
+            logger.exception(e)
+    if isinstance(adate, (datetime.datetime, datetime.date)):
+        return adate
+
+
 def prev_month(adate):
     if adate.month == 1:
-        new_date = datetime.date(year=datetime.date.today().year - 1, month=12,
-                        day=prev_weekday(datetime.date(year=datetime.date.today().year - 1, month=12, day=22)).day)  # New Years Chaos, takes day before Christmas
+        return datetime.date(year=datetime.date.today().year - 1, month=12,
+                             day=prev_weekday(datetime.date(
+                                 year=datetime.date.today().year - 1, month=12,
+                                 day=22)).day)  # New Years Chaos, takes day before Christmas
     else:
-        new_date = datetime.date(adate.year, adate.month, 1) - datetime.timedelta(days=1)
-    return new_date
+        return datetime.date(adate.year, adate.month, 1) - datetime.timedelta(
+            days=1)
+
+
+if __name__ == '__main__':
+    print(closest_weekday(datetime.date.today() - datetime.timedelta(days=4)))

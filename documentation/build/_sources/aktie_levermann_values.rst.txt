@@ -1,0 +1,7 @@
+aktie\_levermann\_values module
+===============================
+
+.. automodule:: aktie_levermann_values
+    :members:
+    :undoc-members:
+    :show-inheritance:

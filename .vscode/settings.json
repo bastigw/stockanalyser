@@ -1,0 +1,20 @@
+{
+    "python.pythonPath": "virtualenv\\Scripts\\python.exe",
+    "python.linting.pylintEnabled": false,
+    "restructuredtext.confPath": "${workspaceFolder}\\documentation\\source",
+    "python.linting.pep8Enabled": true,
+    "python.linting.enabled": true,
+    "python.testing.pyTestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pyTestEnabled": true,
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./tests",
+        "-p",
+        "test_*.py"
+    ]
+}

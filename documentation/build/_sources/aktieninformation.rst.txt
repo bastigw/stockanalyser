@@ -1,0 +1,7 @@
+aktieninformation module
+========================
+
+.. automodule:: aktieninformation
+    :members:
+    :undoc-members:
+    :show-inheritance:

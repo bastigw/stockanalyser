@@ -1,0 +1,7 @@
+aktien\_data\_jeahrlich module
+==============================
+
+.. automodule:: aktien_data_jeahrlich
+    :members:
+    :undoc-members:
+    :show-inheritance:

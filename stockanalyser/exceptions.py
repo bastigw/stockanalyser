@@ -16,3 +16,7 @@ class MissingDataError(Exception):
 
 class ParsingError(Exception):
     pass
+
+
+class DataTypeNotSupportedError(Exception):
+    pass

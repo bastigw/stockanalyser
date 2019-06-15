@@ -2,5 +2,12 @@
 *.swp
 *.swo
 *~
+.idea/
+API/
+tests/
+stockanalyser/data_source/alphavantage.py
+stockanalyser/data_source/yahoo.py
+stockanalyser/data_source/stooq.py
+data/*.pickle
 venv/
-data/
+

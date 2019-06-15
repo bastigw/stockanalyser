@@ -1,0 +1,4 @@
+[
+  "tests/test_stock.py::test_stock",
+  "tests/test_test_onvista.py::test_ov"
+]

@@ -1,0 +1,1066 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Database package &mdash; Stockanalyser v.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="stockanalyser package" href="stockanalyser.html" />
+    <link rel="prev" title="stockanalyser" href="modules.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Stockanalyser
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">All Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">stockanalyser</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Database package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-database">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-database.aktie_levermann_result">database.aktie_levermann_result module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-database.aktie_levermann_values">database.aktie_levermann_values module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-database.aktien_data_jaehrlich">database.aktien_data_jaehrlich module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-database.aktieninformation">database.aktieninformation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-database.database_interface">database.database_interface module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-database.first_tests">database.first_tests module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.html">stockanalyser package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Stockanalyser</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">stockanalyser</a> &raquo;</li>
+        
+      <li>Database package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/database.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="database-package">
+<h1>Database package<a class="headerlink" href="#database-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-database">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-database" title="Permalink to this headline">¶</a></h2>
+<p>Database package</p>
+<p>Main File: <a class="reference external" href="database.html#database.database_interface">Database_Interface</a></p>
+<p>Database must be created locally. Database is not shipped with this project.
+Database straucture and shema can be found in individual file.</p>
+<p>Four Tables are used to Store the data:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" colspan="2">Tables</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="database.html#module-database.aktieninformation">Aktieninformation</a></td>
+<td>is used for storing never changing data such as aktie_id, urls, isin, symbol, name, etc.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="database.html#module-database.aktien_data_jaehrlich">AktienDataJaehrlich</a></td>
+<td>is used for storing yearly data such as ebit (Earning before interests and taxes),
+roe  (Return on Equity), per (Price Earning Ratio), etc.</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="database.html#module-database.aktie_levermann_values">AktieLevermannValues</a></td>
+<td>is used for storing values of each analysis such as quarterly figures reaction, analyst
+ratings, momentum, 6 and 12 month price-change, etc. For complete Levermann Score explanation visit:
+<a class="reference external" href="https://levermann24.com/levermann-strategie/?lang=en">Levermann-Score</a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="database.html#module-database.aktie_levermann_result">AktieLevermannResult</a></td>
+<td>is used for storing points of analysis. Contains all points form analysis as -1, 0 or 1 and the
+sum of points. With the sum of the points you can evaluate the recommendation.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="module-database.aktie_levermann_result">
+<span id="database-aktie-levermann-result-module"></span><h2>database.aktie_levermann_result module<a class="headerlink" href="#module-database.aktie_levermann_result" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte">
+<em class="property">class </em><code class="descclassname">database.aktie_levermann_result.</code><code class="descname">AktieLevermannPunkte</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#database.aktie_levermann_result.BaseModel" title="database.aktie_levermann_result.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">database.aktie_levermann_result.BaseModel</span></code></a></p>
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.DoesNotExist">
+<code class="descname">DoesNotExist</code><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">AktieLevermannPunkteDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.analysten">
+<code class="descname">analysten</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.analysten&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.analysten" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.datum">
+<code class="descname">datum</code><em class="property"> = &lt;DateTimeField: AktieLevermannPunkte.datum&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.datum" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.ebit">
+<code class="descname">ebit</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.ebit&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.ebit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.ek_quote">
+<code class="descname">ek_quote</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.ek_quote&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.ek_quote" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.ek_rendite">
+<code class="descname">ek_rendite</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.ek_rendite&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.ek_rendite" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.gesamtpunkzahl">
+<code class="descname">gesamtpunkzahl</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.gesamtpunkzahl&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.gesamtpunkzahl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.gewinnrevision">
+<code class="descname">gewinnrevision</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.gewinnrevision&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.gewinnrevision" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.gewinnwachstum">
+<code class="descname">gewinnwachstum</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.gewinnwachstum&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.gewinnwachstum" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.id_aktie">
+<code class="descname">id_aktie</code><em class="property"> = &lt;ForeignKeyField: AktieLevermannPunkte.id_aktie&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.id_aktie" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.id_aktie_id">
+<code class="descname">id_aktie_id</code><em class="property"> = &lt;ForeignKeyField: AktieLevermannPunkte.id_aktie&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.id_aktie_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.idaktie_levermann_punkte">
+<code class="descname">idaktie_levermann_punkte</code><em class="property"> = &lt;AutoField: AktieLevermannPunkte.idaktie_levermann_punkte&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.idaktie_levermann_punkte" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.kgv">
+<code class="descname">kgv</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.kgv&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.kgv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.kgv5">
+<code class="descname">kgv5</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.kgv5&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.kgv5" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.kursverlauf12">
+<code class="descname">kursverlauf12</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.kursverlauf12&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.kursverlauf12" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.kursverlauf6">
+<code class="descname">kursverlauf6</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.kursverlauf6&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.kursverlauf6" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.momentum">
+<code class="descname">momentum</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.momentum&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.momentum" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.reaktion_quartals_zahlen">
+<code class="descname">reaktion_quartals_zahlen</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.reaktion_quartals_zahlen&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.reaktion_quartals_zahlen" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktieLevermannPunkte.reversaleffekt">
+<code class="descname">reversaleffekt</code><em class="property"> = &lt;IntegerField: AktieLevermannPunkte.reversaleffekt&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktieLevermannPunkte.reversaleffekt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.aktie_levermann_result.AktienInformation">
+<em class="property">class </em><code class="descclassname">database.aktie_levermann_result.</code><code class="descname">AktienInformation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#database.aktie_levermann_result.BaseModel" title="database.aktie_levermann_result.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">database.aktie_levermann_result.BaseModel</span></code></a></p>
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.DoesNotExist">
+<code class="descname">DoesNotExist</code><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">AktienInformationDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.aktie_id">
+<code class="descname">aktie_id</code><em class="property"> = &lt;AutoField: AktienInformation.aktie_id&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.aktie_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.aktielevermannpunkte_set">
+<code class="descname">aktielevermannpunkte_set</code><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.aktielevermannpunkte_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.art">
+<code class="descname">art</code><em class="property"> = &lt;CharField: AktienInformation.art&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.art" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.benchmark">
+<code class="descname">benchmark</code><em class="property"> = &lt;CharField: AktienInformation.benchmark&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.benchmark" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.finanzennet_url">
+<code class="descname">finanzennet_url</code><em class="property"> = &lt;CharField: AktienInformation.finanzennet_url&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.finanzennet_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.groeße">
+<code class="descname">groeße</code><em class="property"> = &lt;CharField: AktienInformation.groeße&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.groeße" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.isin">
+<code class="descname">isin</code><em class="property"> = &lt;CharField: AktienInformation.isin&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.isin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.marketscreener_id">
+<code class="descname">marketscreener_id</code><em class="property"> = &lt;CharField: AktienInformation.marketscreener_id&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.marketscreener_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.marketscreener_url">
+<code class="descname">marketscreener_url</code><em class="property"> = &lt;CharField: AktienInformation.marketscreener_url&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.marketscreener_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.name">
+<code class="descname">name</code><em class="property"> = &lt;CharField: AktienInformation.name&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.onvista_url">
+<code class="descname">onvista_url</code><em class="property"> = &lt;CharField: AktienInformation.onvista_url&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.onvista_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.symbol">
+<code class="descname">symbol</code><em class="property"> = &lt;CharField: AktienInformation.symbol&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.symbol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.AktienInformation.waehrung">
+<code class="descname">waehrung</code><em class="property"> = &lt;CharField: AktienInformation.waehrung&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.AktienInformation.waehrung" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.aktie_levermann_result.BaseModel">
+<em class="property">class </em><code class="descclassname">database.aktie_levermann_result.</code><code class="descname">BaseModel</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktie_levermann_result.BaseModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">peewee.Model</span></code></p>
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.BaseModel.DoesNotExist">
+<code class="descname">DoesNotExist</code><a class="headerlink" href="#database.aktie_levermann_result.BaseModel.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModelDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_result.BaseModel.id">
+<code class="descname">id</code><em class="property"> = &lt;AutoField: BaseModel.id&gt;</em><a class="headerlink" href="#database.aktie_levermann_result.BaseModel.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.aktie_levermann_result.UnknownField">
+<em class="property">class </em><code class="descclassname">database.aktie_levermann_result.</code><code class="descname">UnknownField</code><span class="sig-paren">(</span><em>*_</em>, <em>**__</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktie_levermann_result.UnknownField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="database.aktie_levermann_result.save_points">
+<code class="descclassname">database.aktie_levermann_result.</code><code class="descname">save_points</code><span class="sig-paren">(</span><em>levermann_result</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#database.aktie_levermann_result.save_points" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-database.aktie_levermann_values">
+<span id="database-aktie-levermann-values-module"></span><h2>database.aktie_levermann_values module<a class="headerlink" href="#module-database.aktie_levermann_values" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="database.aktie_levermann_values.AktieLevermannValues">
+<em class="property">class </em><code class="descclassname">database.aktie_levermann_values.</code><code class="descname">AktieLevermannValues</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#database.aktie_levermann_values.BaseModel" title="database.aktie_levermann_values.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">database.aktie_levermann_values.BaseModel</span></code></a></p>
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.DoesNotExist">
+<code class="descname">DoesNotExist</code><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">AktieLevermannValuesDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.analyst_bewertung">
+<code class="descname">analyst_bewertung</code><em class="property"> = &lt;IntegerField: AktieLevermannValues.analyst_bewertung&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.analyst_bewertung" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.analysten_anzahl">
+<code class="descname">analysten_anzahl</code><em class="property"> = &lt;IntegerField: AktieLevermannValues.analysten_anzahl&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.analysten_anzahl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.datum">
+<code class="descname">datum</code><em class="property"> = &lt;DateTimeField: AktieLevermannValues.datum&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.datum" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.gewinn">
+<code class="descname">gewinn</code><em class="property"> = &lt;DecimalField: AktieLevermannValues.gewinn&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.gewinn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.gewinn_nj">
+<code class="descname">gewinn_nj</code><em class="property"> = &lt;DecimalField: AktieLevermannValues.gewinn_nj&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.gewinn_nj" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.gewinn_veraenderung">
+<code class="descname">gewinn_veraenderung</code><em class="property"> = &lt;DecimalField: AktieLevermannValues.gewinn_veraenderung&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.gewinn_veraenderung" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.gewinn_veraenderung_nj">
+<code class="descname">gewinn_veraenderung_nj</code><em class="property"> = &lt;DecimalField: AktieLevermannValues.gewinn_veraenderung_nj&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.gewinn_veraenderung_nj" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.id_aktie">
+<code class="descname">id_aktie</code><em class="property"> = &lt;ForeignKeyField: AktieLevermannValues.id_aktie&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.id_aktie" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.id_aktie_id">
+<code class="descname">id_aktie_id</code><em class="property"> = &lt;ForeignKeyField: AktieLevermannValues.id_aktie&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.id_aktie_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.idaktie_levermann_values">
+<code class="descname">idaktie_levermann_values</code><em class="property"> = &lt;AutoField: AktieLevermannValues.idaktie_levermann_values&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.idaktie_levermann_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.kgv">
+<code class="descname">kgv</code><em class="property"> = &lt;DecimalField: AktieLevermannValues.kgv&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.kgv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.kgv_5">
+<code class="descname">kgv_5</code><em class="property"> = &lt;DecimalField: AktieLevermannValues.kgv_5&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.kgv_5" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.kurs">
+<code class="descname">kurs</code><em class="property"> = &lt;DecimalField: AktieLevermannValues.kurs&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.kurs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.kurs_ziel">
+<code class="descname">kurs_ziel</code><em class="property"> = &lt;DecimalField: AktieLevermannValues.kurs_ziel&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.kurs_ziel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.quartalszahlen_letzte">
+<code class="descname">quartalszahlen_letzte</code><em class="property"> = &lt;DateTimeField: AktieLevermannValues.quartalszahlen_letzte&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.quartalszahlen_letzte" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.veraenderung_index_quartaltag">
+<code class="descname">veraenderung_index_quartaltag</code><em class="property"> = &lt;DecimalField: AktieLevermannValues.veraenderung_index_quartaltag&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.veraenderung_index_quartaltag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.veraenderung_kurs_12m">
+<code class="descname">veraenderung_kurs_12m</code><em class="property"> = &lt;DecimalField: AktieLevermannValues.veraenderung_kurs_12m&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.veraenderung_kurs_12m" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.veraenderung_kurs_6m">
+<code class="descname">veraenderung_kurs_6m</code><em class="property"> = &lt;DecimalField: AktieLevermannValues.veraenderung_kurs_6m&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.veraenderung_kurs_6m" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktieLevermannValues.veraenderung_kurs_quartaltag">
+<code class="descname">veraenderung_kurs_quartaltag</code><em class="property"> = &lt;DecimalField: AktieLevermannValues.veraenderung_kurs_quartaltag&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktieLevermannValues.veraenderung_kurs_quartaltag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.aktie_levermann_values.AktienInformation">
+<em class="property">class </em><code class="descclassname">database.aktie_levermann_values.</code><code class="descname">AktienInformation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#database.aktie_levermann_values.BaseModel" title="database.aktie_levermann_values.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">database.aktie_levermann_values.BaseModel</span></code></a></p>
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.DoesNotExist">
+<code class="descname">DoesNotExist</code><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">AktienInformationDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.aktie_id">
+<code class="descname">aktie_id</code><em class="property"> = &lt;AutoField: AktienInformation.aktie_id&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.aktie_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.aktielevermannvalues_set">
+<code class="descname">aktielevermannvalues_set</code><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.aktielevermannvalues_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.art">
+<code class="descname">art</code><em class="property"> = &lt;CharField: AktienInformation.art&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.art" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.benchmark">
+<code class="descname">benchmark</code><em class="property"> = &lt;CharField: AktienInformation.benchmark&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.benchmark" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.finanzennet_url">
+<code class="descname">finanzennet_url</code><em class="property"> = &lt;CharField: AktienInformation.finanzennet_url&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.finanzennet_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.groeße">
+<code class="descname">groeße</code><em class="property"> = &lt;CharField: AktienInformation.groeße&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.groeße" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.isin">
+<code class="descname">isin</code><em class="property"> = &lt;CharField: AktienInformation.isin&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.isin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.marketscreener_id">
+<code class="descname">marketscreener_id</code><em class="property"> = &lt;CharField: AktienInformation.marketscreener_id&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.marketscreener_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.marketscreener_url">
+<code class="descname">marketscreener_url</code><em class="property"> = &lt;CharField: AktienInformation.marketscreener_url&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.marketscreener_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.name">
+<code class="descname">name</code><em class="property"> = &lt;CharField: AktienInformation.name&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.onvista_url">
+<code class="descname">onvista_url</code><em class="property"> = &lt;CharField: AktienInformation.onvista_url&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.onvista_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.symbol">
+<code class="descname">symbol</code><em class="property"> = &lt;CharField: AktienInformation.symbol&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.symbol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.AktienInformation.waehrung">
+<code class="descname">waehrung</code><em class="property"> = &lt;CharField: AktienInformation.waehrung&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.AktienInformation.waehrung" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.aktie_levermann_values.BaseModel">
+<em class="property">class </em><code class="descclassname">database.aktie_levermann_values.</code><code class="descname">BaseModel</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktie_levermann_values.BaseModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">peewee.Model</span></code></p>
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.BaseModel.DoesNotExist">
+<code class="descname">DoesNotExist</code><a class="headerlink" href="#database.aktie_levermann_values.BaseModel.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModelDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktie_levermann_values.BaseModel.id">
+<code class="descname">id</code><em class="property"> = &lt;AutoField: BaseModel.id&gt;</em><a class="headerlink" href="#database.aktie_levermann_values.BaseModel.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.aktie_levermann_values.UnknownField">
+<em class="property">class </em><code class="descclassname">database.aktie_levermann_values.</code><code class="descname">UnknownField</code><span class="sig-paren">(</span><em>*_</em>, <em>**__</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktie_levermann_values.UnknownField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="database.aktie_levermann_values.save_points">
+<code class="descclassname">database.aktie_levermann_values.</code><code class="descname">save_points</code><span class="sig-paren">(</span><em>levermann</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#database.aktie_levermann_values.save_points" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-database.aktien_data_jaehrlich">
+<span id="database-aktien-data-jaehrlich-module"></span><h2>database.aktien_data_jaehrlich module<a class="headerlink" href="#module-database.aktien_data_jaehrlich" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="database.aktien_data_jaehrlich.AktienInformation">
+<em class="property">class </em><code class="descclassname">database.aktien_data_jaehrlich.</code><code class="descname">AktienInformation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#database.aktien_data_jaehrlich.BaseModel" title="database.aktien_data_jaehrlich.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">database.aktien_data_jaehrlich.BaseModel</span></code></a></p>
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.DoesNotExist">
+<code class="descname">DoesNotExist</code><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">AktienInformationDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.aktie_id">
+<code class="descname">aktie_id</code><em class="property"> = &lt;AutoField: AktienInformation.aktie_id&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.aktie_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.aktienjaehrlichedaten_set">
+<code class="descname">aktienjaehrlichedaten_set</code><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.aktienjaehrlichedaten_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.art">
+<code class="descname">art</code><em class="property"> = &lt;CharField: AktienInformation.art&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.art" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.benchmark">
+<code class="descname">benchmark</code><em class="property"> = &lt;CharField: AktienInformation.benchmark&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.benchmark" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.finanzennet_url">
+<code class="descname">finanzennet_url</code><em class="property"> = &lt;CharField: AktienInformation.finanzennet_url&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.finanzennet_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.groeße">
+<code class="descname">groeße</code><em class="property"> = &lt;CharField: AktienInformation.groeße&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.groeße" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.isin">
+<code class="descname">isin</code><em class="property"> = &lt;CharField: AktienInformation.isin&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.isin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.marketscreener_id">
+<code class="descname">marketscreener_id</code><em class="property"> = &lt;CharField: AktienInformation.marketscreener_id&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.marketscreener_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.marketscreener_url">
+<code class="descname">marketscreener_url</code><em class="property"> = &lt;CharField: AktienInformation.marketscreener_url&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.marketscreener_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.name">
+<code class="descname">name</code><em class="property"> = &lt;CharField: AktienInformation.name&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.onvista_url">
+<code class="descname">onvista_url</code><em class="property"> = &lt;CharField: AktienInformation.onvista_url&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.onvista_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.symbol">
+<code class="descname">symbol</code><em class="property"> = &lt;CharField: AktienInformation.symbol&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.symbol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienInformation.waehrung">
+<code class="descname">waehrung</code><em class="property"> = &lt;CharField: AktienInformation.waehrung&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienInformation.waehrung" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten">
+<em class="property">class </em><code class="descclassname">database.aktien_data_jaehrlich.</code><code class="descname">AktienJaehrlicheDaten</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#database.aktien_data_jaehrlich.BaseModel" title="database.aktien_data_jaehrlich.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">database.aktien_data_jaehrlich.BaseModel</span></code></a></p>
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.DoesNotExist">
+<code class="descname">DoesNotExist</code><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">AktienJaehrlicheDatenDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.aktie">
+<code class="descname">aktie</code><em class="property"> = &lt;ForeignKeyField: AktienJaehrlicheDaten.aktie&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.aktie" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.aktie_id">
+<code class="descname">aktie_id</code><em class="property"> = &lt;ForeignKeyField: AktienJaehrlicheDaten.aktie&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.aktie_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.ebit">
+<code class="descname">ebit</code><em class="property"> = &lt;DecimalField: AktienJaehrlicheDaten.ebit&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.ebit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.eigenkapitalquote">
+<code class="descname">eigenkapitalquote</code><em class="property"> = &lt;DecimalField: AktienJaehrlicheDaten.eigenkapitalquote&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.eigenkapitalquote" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.eps">
+<code class="descname">eps</code><em class="property"> = &lt;DecimalField: AktienJaehrlicheDaten.eps&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.eps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.idaktien_jaehrliche_daten">
+<code class="descname">idaktien_jaehrliche_daten</code><em class="property"> = &lt;AutoField: AktienJaehrlicheDaten.idaktien_jaehrliche_daten&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.idaktien_jaehrliche_daten" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.jahr">
+<code class="descname">jahr</code><em class="property"> = &lt;IntegerField: AktienJaehrlicheDaten.jahr&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.jahr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.kgv">
+<code class="descname">kgv</code><em class="property"> = &lt;DecimalField: AktienJaehrlicheDaten.kgv&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.kgv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.q1">
+<code class="descname">q1</code><em class="property"> = &lt;DateTimeField: AktienJaehrlicheDaten.q1&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.q1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.q2">
+<code class="descname">q2</code><em class="property"> = &lt;DateTimeField: AktienJaehrlicheDaten.q2&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.q2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.q3">
+<code class="descname">q3</code><em class="property"> = &lt;DateTimeField: AktienJaehrlicheDaten.q3&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.q3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.q4">
+<code class="descname">q4</code><em class="property"> = &lt;DateTimeField: AktienJaehrlicheDaten.q4&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.q4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.AktienJaehrlicheDaten.return_on_equity">
+<code class="descname">return_on_equity</code><em class="property"> = &lt;DecimalField: AktienJaehrlicheDaten.return_on_equity&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.AktienJaehrlicheDaten.return_on_equity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.aktien_data_jaehrlich.BaseModel">
+<em class="property">class </em><code class="descclassname">database.aktien_data_jaehrlich.</code><code class="descname">BaseModel</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktien_data_jaehrlich.BaseModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">peewee.Model</span></code></p>
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.BaseModel.DoesNotExist">
+<code class="descname">DoesNotExist</code><a class="headerlink" href="#database.aktien_data_jaehrlich.BaseModel.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModelDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktien_data_jaehrlich.BaseModel.id">
+<code class="descname">id</code><em class="property"> = &lt;AutoField: BaseModel.id&gt;</em><a class="headerlink" href="#database.aktien_data_jaehrlich.BaseModel.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.aktien_data_jaehrlich.UnknownField">
+<em class="property">class </em><code class="descclassname">database.aktien_data_jaehrlich.</code><code class="descname">UnknownField</code><span class="sig-paren">(</span><em>*_</em>, <em>**__</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktien_data_jaehrlich.UnknownField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="database.aktien_data_jaehrlich.after_request">
+<code class="descclassname">database.aktien_data_jaehrlich.</code><code class="descname">after_request</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktien_data_jaehrlich.after_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.aktien_data_jaehrlich.before_request">
+<code class="descclassname">database.aktien_data_jaehrlich.</code><code class="descname">before_request</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#database.aktien_data_jaehrlich.before_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.aktien_data_jaehrlich.row_get">
+<code class="descclassname">database.aktien_data_jaehrlich.</code><code class="descname">row_get</code><span class="sig-paren">(</span><em>aktien_id: int</em>, <em>year: int</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktien_data_jaehrlich.row_get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.aktien_data_jaehrlich.row_insert">
+<code class="descclassname">database.aktien_data_jaehrlich.</code><code class="descname">row_insert</code><span class="sig-paren">(</span><em>colum_value: dict</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#database.aktien_data_jaehrlich.row_insert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.aktien_data_jaehrlich.row_update">
+<code class="descclassname">database.aktien_data_jaehrlich.</code><code class="descname">row_update</code><span class="sig-paren">(</span><em>aktien_id: int</em>, <em>year: int</em>, <em>colum_value: dict</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#database.aktien_data_jaehrlich.row_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.aktien_data_jaehrlich.save_yearly">
+<code class="descclassname">database.aktien_data_jaehrlich.</code><code class="descname">save_yearly</code><span class="sig-paren">(</span><em>stock_object</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#database.aktien_data_jaehrlich.save_yearly" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.aktien_data_jaehrlich.sort_quarterly_dates">
+<code class="descclassname">database.aktien_data_jaehrlich.</code><code class="descname">sort_quarterly_dates</code><span class="sig-paren">(</span><em>quarterly_figure_dates: list</em>, <em>year: int</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#database.aktien_data_jaehrlich.sort_quarterly_dates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-database.aktieninformation">
+<span id="database-aktieninformation-module"></span><h2>database.aktieninformation module<a class="headerlink" href="#module-database.aktieninformation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="database.aktieninformation.AktienInformation">
+<em class="property">class </em><code class="descclassname">database.aktieninformation.</code><code class="descname">AktienInformation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktieninformation.AktienInformation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#database.aktieninformation.BaseModel" title="database.aktieninformation.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">database.aktieninformation.BaseModel</span></code></a></p>
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.DoesNotExist">
+<code class="descname">DoesNotExist</code><a class="headerlink" href="#database.aktieninformation.AktienInformation.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">AktienInformationDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.aktie_id">
+<code class="descname">aktie_id</code><em class="property"> = &lt;AutoField: AktienInformation.aktie_id&gt;</em><a class="headerlink" href="#database.aktieninformation.AktienInformation.aktie_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.art">
+<code class="descname">art</code><em class="property"> = &lt;CharField: AktienInformation.art&gt;</em><a class="headerlink" href="#database.aktieninformation.AktienInformation.art" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.benchmark">
+<code class="descname">benchmark</code><em class="property"> = &lt;CharField: AktienInformation.benchmark&gt;</em><a class="headerlink" href="#database.aktieninformation.AktienInformation.benchmark" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.finanzennet_url">
+<code class="descname">finanzennet_url</code><em class="property"> = &lt;CharField: AktienInformation.finanzennet_url&gt;</em><a class="headerlink" href="#database.aktieninformation.AktienInformation.finanzennet_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.groeße">
+<code class="descname">groeße</code><em class="property"> = &lt;CharField: AktienInformation.groeße&gt;</em><a class="headerlink" href="#database.aktieninformation.AktienInformation.groeße" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.isin">
+<code class="descname">isin</code><em class="property"> = &lt;CharField: AktienInformation.isin&gt;</em><a class="headerlink" href="#database.aktieninformation.AktienInformation.isin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.marketscreener_id">
+<code class="descname">marketscreener_id</code><em class="property"> = &lt;CharField: AktienInformation.marketscreener_id&gt;</em><a class="headerlink" href="#database.aktieninformation.AktienInformation.marketscreener_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.marketscreener_url">
+<code class="descname">marketscreener_url</code><em class="property"> = &lt;CharField: AktienInformation.marketscreener_url&gt;</em><a class="headerlink" href="#database.aktieninformation.AktienInformation.marketscreener_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.name">
+<code class="descname">name</code><em class="property"> = &lt;CharField: AktienInformation.name&gt;</em><a class="headerlink" href="#database.aktieninformation.AktienInformation.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.onvista_url">
+<code class="descname">onvista_url</code><em class="property"> = &lt;CharField: AktienInformation.onvista_url&gt;</em><a class="headerlink" href="#database.aktieninformation.AktienInformation.onvista_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.symbol">
+<code class="descname">symbol</code><em class="property"> = &lt;CharField: AktienInformation.symbol&gt;</em><a class="headerlink" href="#database.aktieninformation.AktienInformation.symbol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.AktienInformation.waehrung">
+<code class="descname">waehrung</code><em class="property"> = &lt;CharField: AktienInformation.waehrung&gt;</em><a class="headerlink" href="#database.aktieninformation.AktienInformation.waehrung" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.aktieninformation.BaseModel">
+<em class="property">class </em><code class="descclassname">database.aktieninformation.</code><code class="descname">BaseModel</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktieninformation.BaseModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">peewee.Model</span></code></p>
+<dl class="attribute">
+<dt id="database.aktieninformation.BaseModel.DoesNotExist">
+<code class="descname">DoesNotExist</code><a class="headerlink" href="#database.aktieninformation.BaseModel.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModelDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="database.aktieninformation.BaseModel.id">
+<code class="descname">id</code><em class="property"> = &lt;AutoField: BaseModel.id&gt;</em><a class="headerlink" href="#database.aktieninformation.BaseModel.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.aktieninformation.UnknownField">
+<em class="property">class </em><code class="descclassname">database.aktieninformation.</code><code class="descname">UnknownField</code><span class="sig-paren">(</span><em>*_</em>, <em>**__</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktieninformation.UnknownField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="database.aktieninformation.after_request">
+<code class="descclassname">database.aktieninformation.</code><code class="descname">after_request</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktieninformation.after_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.aktieninformation.before_request">
+<code class="descclassname">database.aktieninformation.</code><code class="descname">before_request</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#database.aktieninformation.before_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.aktieninformation.find_data_entry">
+<code class="descclassname">database.aktieninformation.</code><code class="descname">find_data_entry</code><span class="sig-paren">(</span><em>fields: str</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#database.aktieninformation.find_data_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches for data entry in local database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fields</strong> – Can be anything</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">first matching entry</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="database.aktieninformation.insert_data">
+<code class="descclassname">database.aktieninformation.</code><code class="descname">insert_data</code><span class="sig-paren">(</span><em>stock_object</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#database.aktieninformation.insert_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.aktieninformation.read_value">
+<code class="descclassname">database.aktieninformation.</code><code class="descname">read_value</code><span class="sig-paren">(</span><em>case: str</em>, <em>isin: str</em><span class="sig-paren">)</span><a class="headerlink" href="#database.aktieninformation.read_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-database.database_interface">
+<span id="database-database-interface-module"></span><h2>database.database_interface module<a class="headerlink" href="#module-database.database_interface" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="database.database_interface.find_entry_in_aktieninformation">
+<code class="descclassname">database.database_interface.</code><code class="descname">find_entry_in_aktieninformation</code><span class="sig-paren">(</span><em>field: str</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#database.database_interface.find_entry_in_aktieninformation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.database_interface.save_information">
+<code class="descclassname">database.database_interface.</code><code class="descname">save_information</code><span class="sig-paren">(</span><em>stock_object</em><span class="sig-paren">)</span><a class="headerlink" href="#database.database_interface.save_information" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.database_interface.save_points">
+<code class="descclassname">database.database_interface.</code><code class="descname">save_points</code><span class="sig-paren">(</span><em>levermann_result_object</em><span class="sig-paren">)</span><a class="headerlink" href="#database.database_interface.save_points" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.database_interface.save_values">
+<code class="descclassname">database.database_interface.</code><code class="descname">save_values</code><span class="sig-paren">(</span><em>levermann_object</em><span class="sig-paren">)</span><a class="headerlink" href="#database.database_interface.save_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.database_interface.save_yearly">
+<code class="descclassname">database.database_interface.</code><code class="descname">save_yearly</code><span class="sig-paren">(</span><em>stock_object</em><span class="sig-paren">)</span><a class="headerlink" href="#database.database_interface.save_yearly" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-database.first_tests">
+<span id="database-first-tests-module"></span><h2>database.first_tests module<a class="headerlink" href="#module-database.first_tests" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="stockanalyser.html" class="btn btn-neutral float-right" title="stockanalyser package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modules.html" class="btn btn-neutral" title="stockanalyser" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, S.B.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

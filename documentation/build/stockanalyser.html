@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>stockanalyser package &mdash; Stockanalyser v.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="stockanalyser.analysis package" href="stockanalyser.analysis.html" />
+    <link rel="prev" title="Database package" href="database.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Stockanalyser
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">All Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">stockanalyser</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="database.html">Database package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">stockanalyser package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stockanalyser.analysis.html">stockanalyser.analysis package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="stockanalyser.data_source.html">stockanalyser.data_source package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-stockanalyser.config">stockanalyser.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-stockanalyser.exceptions">stockanalyser.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-stockanalyser.fileutils">stockanalyser.fileutils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-stockanalyser.input">stockanalyser.input module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-stockanalyser.mymoney">stockanalyser.mymoney module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-stockanalyser.stock">stockanalyser.stock module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-stockanalyser">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Stockanalyser</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">stockanalyser</a> &raquo;</li>
+        
+      <li>stockanalyser package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/stockanalyser.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="stockanalyser-package">
+<h1>stockanalyser package<a class="headerlink" href="#stockanalyser-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="stockanalyser.analysis.html">stockanalyser.analysis package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.analysis.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.analysis.html#module-stockanalyser.analysis.levermann">stockanalyser.analysis.levermann module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.analysis.html#module-stockanalyser.analysis.levernann_result">stockanalyser.analysis.levernann_result module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.analysis.html#module-stockanalyser.analysis">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stockanalyser.data_source.html">stockanalyser.data_source package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.data_source.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.data_source.html#module-stockanalyser.data_source.alphavantage">stockanalyser.data_source.alphavantage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.data_source.html#module-stockanalyser.data_source.common">stockanalyser.data_source.common module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.data_source.html#module-stockanalyser.data_source.finanzen_net">stockanalyser.data_source.finanzen_net module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.data_source.html#module-stockanalyser.data_source.marketscreener">stockanalyser.data_source.marketscreener module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.data_source.html#module-stockanalyser.data_source.onvista">stockanalyser.data_source.onvista module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.data_source.html#module-stockanalyser.data_source.stooq">stockanalyser.data_source.stooq module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.data_source.html#module-stockanalyser.data_source.yahoo">stockanalyser.data_source.yahoo module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stockanalyser.data_source.html#module-stockanalyser.data_source">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-stockanalyser.config">
+<span id="stockanalyser-config-module"></span><h2>stockanalyser.config module<a class="headerlink" href="#module-stockanalyser.config" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-stockanalyser.exceptions">
+<span id="stockanalyser-exceptions-module"></span><h2>stockanalyser.exceptions module<a class="headerlink" href="#module-stockanalyser.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="stockanalyser.exceptions.InvalidValueError">
+<em class="property">exception </em><code class="descclassname">stockanalyser.exceptions.</code><code class="descname">InvalidValueError</code><a class="headerlink" href="#stockanalyser.exceptions.InvalidValueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="stockanalyser.exceptions.MissingDataError">
+<em class="property">exception </em><code class="descclassname">stockanalyser.exceptions.</code><code class="descname">MissingDataError</code><a class="headerlink" href="#stockanalyser.exceptions.MissingDataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="stockanalyser.exceptions.NotSupportedError">
+<em class="property">exception </em><code class="descclassname">stockanalyser.exceptions.</code><code class="descname">NotSupportedError</code><a class="headerlink" href="#stockanalyser.exceptions.NotSupportedError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="stockanalyser.exceptions.ParsingError">
+<em class="property">exception </em><code class="descclassname">stockanalyser.exceptions.</code><code class="descname">ParsingError</code><a class="headerlink" href="#stockanalyser.exceptions.ParsingError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="stockanalyser.exceptions.UnknownIndexError">
+<em class="property">exception </em><code class="descclassname">stockanalyser.exceptions.</code><code class="descname">UnknownIndexError</code><a class="headerlink" href="#stockanalyser.exceptions.UnknownIndexError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-stockanalyser.fileutils">
+<span id="stockanalyser-fileutils-module"></span><h2>stockanalyser.fileutils module<a class="headerlink" href="#module-stockanalyser.fileutils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="stockanalyser.fileutils.to_pickle_filename">
+<code class="descclassname">stockanalyser.fileutils.</code><code class="descname">to_pickle_filename</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.fileutils.to_pickle_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-stockanalyser.input">
+<span id="stockanalyser-input-module"></span><h2>stockanalyser.input module<a class="headerlink" href="#module-stockanalyser.input" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="stockanalyser.input.QueryType">
+<em class="property">class </em><code class="descclassname">stockanalyser.input.</code><code class="descname">QueryType</code><a class="headerlink" href="#stockanalyser.input.QueryType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="stockanalyser.input.QueryType.CURRENCY">
+<code class="descname">CURRENCY</code><em class="property"> = 2</em><a class="headerlink" href="#stockanalyser.input.QueryType.CURRENCY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stockanalyser.input.QueryType.DATE">
+<code class="descname">DATE</code><em class="property"> = 3</em><a class="headerlink" href="#stockanalyser.input.QueryType.DATE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stockanalyser.input.QueryType.PERCENT">
+<code class="descname">PERCENT</code><em class="property"> = 1</em><a class="headerlink" href="#stockanalyser.input.QueryType.PERCENT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stockanalyser.input.QueryType.STOCK_SYMBOL">
+<code class="descname">STOCK_SYMBOL</code><em class="property"> = 5</em><a class="headerlink" href="#stockanalyser.input.QueryType.STOCK_SYMBOL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stockanalyser.input.QueryType.URL">
+<code class="descname">URL</code><em class="property"> = 6</em><a class="headerlink" href="#stockanalyser.input.QueryType.URL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stockanalyser.input.QueryType.YAHOO_ANALYST_RATING">
+<code class="descname">YAHOO_ANALYST_RATING</code><em class="property"> = 4</em><a class="headerlink" href="#stockanalyser.input.QueryType.YAHOO_ANALYST_RATING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="stockanalyser.input.query_input">
+<code class="descclassname">stockanalyser.input.</code><code class="descname">query_input</code><span class="sig-paren">(</span><em>value_name</em>, <em>val_type</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.input.query_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stockanalyser.input.validate_percent_value">
+<code class="descclassname">stockanalyser.input.</code><code class="descname">validate_percent_value</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.input.validate_percent_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stockanalyser.input.validate_str_date">
+<code class="descclassname">stockanalyser.input.</code><code class="descname">validate_str_date</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.input.validate_str_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-stockanalyser.mymoney">
+<span id="stockanalyser-mymoney-module"></span><h2>stockanalyser.mymoney module<a class="headerlink" href="#module-stockanalyser.mymoney" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="stockanalyser.mymoney.Money">
+<em class="property">class </em><code class="descclassname">stockanalyser.mymoney.</code><code class="descname">Money</code><span class="sig-paren">(</span><em>amount='0'</em>, <em>currency=None</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.mymoney.Money" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">money.money.Money</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-stockanalyser.stock">
+<span id="stockanalyser-stock-module"></span><h2>stockanalyser.stock module<a class="headerlink" href="#module-stockanalyser.stock" title="Permalink to this headline">¶</a></h2>
+<p>Create Stock objects with financial data.</p>
+<dl class="docutils">
+<dt>Classes:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="stockanalyser.html#stockanalyser.stock.Stock">Stock</a></li>
+<li><a class="reference external" href="stockanalyser.html#stockanalyser.stock.Cap">Cap</a></li>
+</ul>
+</dd>
+</dl>
+<dl class="class">
+<dt id="stockanalyser.stock.Cap">
+<em class="property">class </em><code class="descclassname">stockanalyser.stock.</code><code class="descname">Cap</code><a class="headerlink" href="#stockanalyser.stock.Cap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<dl class="docutils">
+<dt>Different types of Cap Size:</dt>
+<dd><ul class="first last simple">
+<li>Small: &lt; 2 Billion</li>
+<li>Medium: 2 Billion - 5 Billion</li>
+<li>Large: &gt; 5 Billion</li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="stockanalyser.stock.Cap.LARGE">
+<code class="descname">LARGE</code><em class="property"> = 3</em><a class="headerlink" href="#stockanalyser.stock.Cap.LARGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stockanalyser.stock.Cap.MID">
+<code class="descname">MID</code><em class="property"> = 2</em><a class="headerlink" href="#stockanalyser.stock.Cap.MID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="stockanalyser.stock.Cap.SMALL">
+<code class="descname">SMALL</code><em class="property"> = 1</em><a class="headerlink" href="#stockanalyser.stock.Cap.SMALL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stockanalyser.stock.Stock">
+<em class="property">class </em><code class="descclassname">stockanalyser.stock.</code><code class="descname">Stock</code><span class="sig-paren">(</span><em>symbol=None</em>, <em>isin=None</em>, <em>name=None</em>, <em>auto_update=True</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.stock.Stock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="docutils">
+<dt>Create Stock-Object with different kinds of Scrapers:</dt>
+<dd><ul class="first last simple">
+<li>OnvistaScraper</li>
+<li>FinanzenNetScraper</li>
+<li>MarketscreenerScraper</li>
+</ul>
+</dd>
+<dt>Functions:</dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">update_stock_info(self)</span></code>:</dt>
+<dd><ul class="first last">
+<li>gets data from Websites</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">save(self)</span></code>:</dt>
+<dd><ul class="first last">
+<li>saves itself to the database</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="stockanalyser.stock.Stock.eval_earning_revision_ny">
+<code class="descname">eval_earning_revision_ny</code><em class="property"> = None</em><a class="headerlink" href="#stockanalyser.stock.Stock.eval_earning_revision_ny" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call update_stock_info automatically</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="stockanalyser.stock.Stock.five_year_per">
+<code class="descname">five_year_per</code><a class="headerlink" href="#stockanalyser.stock.Stock.five_year_per" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.stock.Stock.last_quarterly_figures_release_date">
+<code class="descname">last_quarterly_figures_release_date</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.stock.Stock.last_quarterly_figures_release_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.stock.Stock.price_earnings_ratio_5year">
+<code class="descname">price_earnings_ratio_5year</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#stockanalyser.stock.Stock.price_earnings_ratio_5year" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.stock.Stock.save">
+<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.stock.Stock.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves Stock-Object to local database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.stock.Stock.update_stock_info">
+<code class="descname">update_stock_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.stock.Stock.update_stock_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates financial data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-stockanalyser">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-stockanalyser" title="Permalink to this headline">¶</a></h2>
+<p>Package analyses stock</p>
+<dl class="docutils">
+<dt>Packages:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="stockanalyser.analysis.html">Analysis</a></li>
+<li><a class="reference external" href="stockanalyser.stockanalyser.data_source.html">Datasource</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="stockanalyser.analysis.html" class="btn btn-neutral float-right" title="stockanalyser.analysis package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="database.html" class="btn btn-neutral" title="Database package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, S.B.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

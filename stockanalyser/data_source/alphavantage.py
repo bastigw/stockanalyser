@@ -1,9 +1,9 @@
 import datetime
 import json
-import logging
 import urllib.request
 
 from stockanalyser.data_source import common
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -13,31 +13,21 @@ BASE_SEARCH_URL = 'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keyw
 cache = {}
 
 
+# todo get rid of me DONE
+
 class EmptyStockDataResponse(Exception):
     pass
 
 
 def stock_quote(symbol, date):
-    date_difference = common._date_difference(date)
+    if not common.is_weekday(date):
+        date = common.prev_weekday(date)
+    full_output: bool = False if (common.date_difference(date) * 251 / 365) < 100 else True
     date = date.strftime("%Y-%m-%d")
     if symbol not in cache:
-        outputsize = "&outputsize=full" if date_difference >= 100 else ""
-        url = (BASE_URL + "?function=TIME_SERIES_DAILY_ADJUSTED&apikey=" + API_KEY +
-               outputsize +
-               "&symbol=" + symbol)
-        logger.debug("Retrieving closing stock quote for '%s' on %s (%s)" % (symbol, date,
-                                                                             url))
-        page_av = urllib.request.urlopen(url).read()
-        r_json = json.loads(page_av.decode("utf-8"))
-        cache[symbol] = r_json
-    elif cache[symbol]["Time Series (Daily)"].__len__() <= date_difference:
-        url = (BASE_URL + "?function=TIME_SERIES_DAILY_ADJUSTED&apikey=" + API_KEY +
-               "&outputsize=full&symbol=" + symbol)
-        logger.debug("Retrieving full closing stock quote for '%s' on %s (%s)" % (symbol, date,
-                                                                                  url))
-        page_av = urllib.request.urlopen(url).read()
-        r_json = json.loads(page_av.decode("utf-8"))
-        cache[symbol] = r_json
+        _get_stock_json(symbol, full_output=False)
+    elif full_output is True and cache[symbol]['Time Series (Daily)'].__len__() <= 100:
+        _get_stock_json(symbol, full_output=True)
     else:
         logger.debug("Retrieving stock quote for '%s' on %s from cache" %
                      (symbol, date))
@@ -47,7 +37,7 @@ def stock_quote(symbol, date):
     logger.debug("Closing stock quote for '%s' on %s: %s" % (symbol, date, value_daily_close))
     if value_daily_close == 0.0:  # Change date and try again
         date += datetime.timedelta(days=-1)
-        if date.isoweekday() in set((6, 7)):
+        if date.isoweekday() in {6, 7}:
             date += datetime.timedelta(days=(8 - date.isoweekday()))
             stock_quote(symbol, date)
         else:
@@ -57,10 +47,19 @@ def stock_quote(symbol, date):
         #                         r_json["Time Series (Daily)"][str(date)]
         #                         ["4.  close"])
 
-    return value_daily_close
+    return round(value_daily_close, 2)
 
 
-def getPageAlpha(search):
+def _get_stock_json(symbol: str, full_output=False):
+    outputsize = "&outputsize=full" if full_output is True else ""
+    url = (BASE_URL + "?function=TIME_SERIES_DAILY_ADJUSTED&apikey=" + API_KEY + outputsize + "&symbol=" + symbol)
+    logger.debug("Retrieving closing stock quote for '{}'".format(symbol))
+    page_av = common.request_url_to_str(url)
+    r_json = json.loads(page_av.decode("utf-8"))
+    cache[symbol] = r_json
+
+
+def getPagmmeAlpha(search):
     url = BASE_SEARCH_URL + search + '&apikey=' + API_KEY
     response = urllib.request.urlopen(url)
     logger.debug("Retrieving search for '%s' on %s" % (search,
@@ -89,8 +88,9 @@ def findCurrency(json_response_page, currency=None, region=None):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-    # r = stock_quote("VOW.DE", (datetime.datetime.now() -
+    r = stock_quote("VOW.DE", (datetime.datetime.now()))
+    x = stock_quote("VOW.DE", (datetime.datetime.now() - datetime.timedelta(days=140)))  # -
     #                            datetime.timedelta(days=99)))
     # r = stock_quote("VOW.DE", (datetime.datetime.now() -
     #                            datetime.timedelta(days=101)))
+    pass

@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>stockanalyser.data_source package &mdash; Stockanalyser v.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="stockanalyser.analysis package" href="stockanalyser.analysis.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Stockanalyser
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">All Modules:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">stockanalyser</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="database.html">database package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="stockanalyser.html">stockanalyser package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="stockanalyser.html#module-stockanalyser">Module contents</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="stockanalyser.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="stockanalyser.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="stockanalyser.html#module-stockanalyser.config">stockanalyser.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="stockanalyser.html#module-stockanalyser.exceptions">stockanalyser.exceptions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="stockanalyser.html#module-stockanalyser.fileutils">stockanalyser.fileutils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="stockanalyser.html#module-stockanalyser.input">stockanalyser.input module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="stockanalyser.html#module-stockanalyser.mymoney">stockanalyser.mymoney module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="stockanalyser.html#module-stockanalyser.stock">Stock module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Stockanalyser</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">stockanalyser</a> &raquo;</li>
+        
+          <li><a href="stockanalyser.html">stockanalyser package</a> &raquo;</li>
+        
+      <li>stockanalyser.data_source package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/stockanalyser.data_source.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="stockanalyser-data-source-package">
+<h1>stockanalyser.data_source package<a class="headerlink" href="#stockanalyser-data-source-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-stockanalyser.data_source.alphavantage">
+<span id="stockanalyser-data-source-alphavantage-module"></span><h2>stockanalyser.data_source.alphavantage module<a class="headerlink" href="#module-stockanalyser.data_source.alphavantage" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="stockanalyser.data_source.alphavantage.EmptyStockDataResponse">
+<em class="property">exception </em><code class="descclassname">stockanalyser.data_source.alphavantage.</code><code class="descname">EmptyStockDataResponse</code><a class="headerlink" href="#stockanalyser.data_source.alphavantage.EmptyStockDataResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stockanalyser.data_source.alphavantage.findCurrency">
+<code class="descclassname">stockanalyser.data_source.alphavantage.</code><code class="descname">findCurrency</code><span class="sig-paren">(</span><em>json_response_page</em>, <em>currency=None</em>, <em>region=None</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.alphavantage.findCurrency" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stockanalyser.data_source.alphavantage.getPageAlpha">
+<code class="descclassname">stockanalyser.data_source.alphavantage.</code><code class="descname">getPageAlpha</code><span class="sig-paren">(</span><em>search</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.alphavantage.getPageAlpha" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stockanalyser.data_source.alphavantage.stock_quote">
+<code class="descclassname">stockanalyser.data_source.alphavantage.</code><code class="descname">stock_quote</code><span class="sig-paren">(</span><em>symbol</em>, <em>date</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.alphavantage.stock_quote" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-stockanalyser.data_source.common">
+<span id="stockanalyser-data-source-common-module"></span><h2>stockanalyser.data_source.common module<a class="headerlink" href="#module-stockanalyser.data_source.common" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="stockanalyser.data_source.common.german_date_to_normal">
+<code class="descclassname">stockanalyser.data_source.common.</code><code class="descname">german_date_to_normal</code><span class="sig-paren">(</span><em>date</em>, <em>str_format</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.common.german_date_to_normal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stockanalyser.data_source.common.get_random_ua">
+<code class="descclassname">stockanalyser.data_source.common.</code><code class="descname">get_random_ua</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.common.get_random_ua" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stockanalyser.data_source.common.request_url_to_str">
+<code class="descclassname">stockanalyser.data_source.common.</code><code class="descname">request_url_to_str</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.common.request_url_to_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stockanalyser.data_source.common.str_to_etree">
+<code class="descclassname">stockanalyser.data_source.common.</code><code class="descname">str_to_etree</code><span class="sig-paren">(</span><em>response_read</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.common.str_to_etree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stockanalyser.data_source.common.url_to_etree">
+<code class="descclassname">stockanalyser.data_source.common.</code><code class="descname">url_to_etree</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.common.url_to_etree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-stockanalyser.data_source.finanzen_net">
+<span id="stockanalyser-data-source-finanzen-net-module"></span><h2>stockanalyser.data_source.finanzen_net module<a class="headerlink" href="#module-stockanalyser.data_source.finanzen_net" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="stockanalyser.data_source.finanzen_net.FinanzenNetScraper">
+<em class="property">class </em><code class="descclassname">stockanalyser.data_source.finanzen_net.</code><code class="descname">FinanzenNetScraper</code><span class="sig-paren">(</span><em>url=None</em>, <em>isin=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.finanzen_net.FinanzenNetScraper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="stockanalyser.data_source.finanzen_net.FinanzenNetScraper.benchmark">
+<code class="descname">benchmark</code><a class="headerlink" href="#stockanalyser.data_source.finanzen_net.FinanzenNetScraper.benchmark" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.data_source.finanzen_net.FinanzenNetScraper.fetch_recent_quarterly_figures_release_date">
+<code class="descname">_fetch_recent_quarterly_figures_release_date</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.finanzen_net.FinanzenNetScraper.fetch_recent_quarterly_figures_release_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.data_source.finanzen_net.FinanzenNetScraper.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.finanzen_net.FinanzenNetScraper.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.data_source.finanzen_net.FinanzenNetScraper.lookup_url">
+<code class="descname">_lookup_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.finanzen_net.FinanzenNetScraper.lookup_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-stockanalyser.data_source.marketscreener">
+<span id="stockanalyser-data-source-marketscreener-module"></span><h2>stockanalyser.data_source.marketscreener module<a class="headerlink" href="#module-stockanalyser.data_source.marketscreener" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="stockanalyser.data_source.marketscreener.MarketScreenerScraper">
+<em class="property">class </em><code class="descclassname">stockanalyser.data_source.marketscreener.</code><code class="descname">MarketScreenerScraper</code><span class="sig-paren">(</span><em>ms_id=None</em>, <em>ms_url=None</em>, <em>isin=None</em>, <em>name=None</em>, <em>exchange='Deutschexa0Boersexa0AG'</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.marketscreener.MarketScreenerScraper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="stockanalyser.data_source.marketscreener.MarketScreenerScraper.get_consensus">
+<code class="descname">_set_consensus</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#stockanalyser.data_source.marketscreener.MarketScreenerScraper.get_consensus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.data_source.marketscreener.MarketScreenerScraper.get_revison">
+<code class="descname">_set_revison</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.marketscreener.MarketScreenerScraper.get_revison" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-stockanalyser.data_source.onvista">
+<span id="stockanalyser-data-source-onvista-module"></span><h2>stockanalyser.data_source.onvista module<a class="headerlink" href="#module-stockanalyser.data_source.onvista" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="stockanalyser.data_source.onvista.OnvistaScraper">
+<em class="property">class </em><code class="descclassname">stockanalyser.data_source.onvista.</code><code class="descname">OnvistaScraper</code><span class="sig-paren">(</span><em>url=None</em>, <em>isin=None</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.onvista.OnvistaScraper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="stockanalyser.data_source.onvista.OnvistaScraper.analyst_ratings">
+<code class="descname">analyst_ratings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.onvista.OnvistaScraper.analyst_ratings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.data_source.onvista.OnvistaScraper.ebit_margin">
+<code class="descname">ebit_margin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.onvista.OnvistaScraper.ebit_margin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.data_source.onvista.OnvistaScraper.eps">
+<code class="descname">eps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.onvista.OnvistaScraper.eps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.data_source.onvista.OnvistaScraper.equity_ratio">
+<code class="descname">equity_ratio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.onvista.OnvistaScraper.equity_ratio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.data_source.onvista.OnvistaScraper.fetch_fundamental_webpage">
+<code class="descname">_fetch_fundamental_webpage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.onvista.OnvistaScraper.fetch_fundamental_webpage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.data_source.onvista.OnvistaScraper.fetch_overview_webpage">
+<code class="descname">_fetch_overview_webpage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.onvista.OnvistaScraper.fetch_overview_webpage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.data_source.onvista.OnvistaScraper.lookup_url">
+<code class="descname">_lookup_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.onvista.OnvistaScraper.lookup_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.data_source.onvista.OnvistaScraper.price_earnings_ratio">
+<code class="descname">price_earnings_ratio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.onvista.OnvistaScraper.price_earnings_ratio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="stockanalyser.data_source.onvista.OnvistaScraper.roe">
+<code class="descname">roe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.onvista.OnvistaScraper.roe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="stockanalyser.data_source.onvista.is_number">
+<code class="descclassname">stockanalyser.data_source.onvista.</code><code class="descname">is_number</code><span class="sig-paren">(</span><em>txt</em><span class="sig-paren">)</span><a class="headerlink" href="#stockanalyser.data_source.onvista.is_number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-stockanalyser.data_source.stooq">
+<span id="stockanalyser-data-source-stooq-module"></span><h2>stockanalyser.data_source.stooq module<a class="headerlink" href="#module-stockanalyser.data_source.stooq" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-stockanalyser.data_source.yahoo">
+<span id="stockanalyser-data-source-yahoo-module"></span><h2>stockanalyser.data_source.yahoo module<a class="headerlink" href="#module-stockanalyser.data_source.yahoo" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="stockanalyser.data_source.yahoo.get_stock_info">
+<code class="descclassname">stockanalyser.data_source.yahoo.</code><code class="descname">get_stock_info</code><span class="sig-paren">(</span><em>symbol: str</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#stockanalyser.data_source.yahoo.get_stock_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stockanalyser.data_source.yahoo.lookup_symbol">
+<code class="descclassname">stockanalyser.data_source.yahoo.</code><code class="descname">lookup_symbol</code><span class="sig-paren">(</span><em>name: str</em>, <em>loc: str = None</em><span class="sig-paren">)</span> &#x2192; tuple<a class="headerlink" href="#stockanalyser.data_source.yahoo.lookup_symbol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds symbol from Yahoo Search
+:param name: Name of the stock
+:param loc: Location where the stock is listed</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-stockanalyser.data_source">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-stockanalyser.data_source" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="stockanalyser.analysis.html" class="btn btn-neutral" title="stockanalyser.analysis package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, S.B.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

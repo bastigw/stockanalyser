@@ -1,18 +1,17 @@
 import json
-import logging
-import urllib.parse
-import urllib.request
 
 from stockanalyser.data_source import common
+import logging
 
 logger = logging.getLogger(__name__)
 
 
-def get_stock_info(symbol):
+# todo get rid of me DONE
+
+def get_stock_info(symbol: str) -> dict:
     # from https://stackoverflow.com/a/47148296/537958
     url = 'https://finance.yahoo.com/quote/' + symbol
-    req = urllib.request.Request(url)
-    resp = urllib.request.urlopen(req).read()
+    resp = common.request_url_to_str(url)
 
     r = resp.decode("utf-8")
     i1 = 0
@@ -30,7 +29,7 @@ def get_stock_info(symbol):
     name = data['context']['dispatcher']['stores']['QuoteSummaryStore']['price']['shortName']
 
     res = {"Name": name,
-           "PreviousClose": prev_close,
+           "PreviousClose": round(prev_close, 2),
            "Currency": currency,
            "MarketCapitalization": int(market_cap)
            }
@@ -38,7 +37,11 @@ def get_stock_info(symbol):
     return res
 
 
-def lookup_symbol(name, loc=None):
+def lookup_symbol(name: str, loc: str = None) -> tuple:
+    """ Finds symbol from Yahoo Search
+        :param name: Name of the stock
+        :param loc: Location where the stock is listed
+    """
     if loc is None:
         loc = 'GER'
 
@@ -57,10 +60,10 @@ def lookup_symbol(name, loc=None):
             return symbol, exchange, name
 
 
-""" Dictionary that returns exchange with location as input """
-
-
-def __switch_exchange(loc_found):
+def __switch_exchange(loc_found: str) -> str:
+    """ Dictionary that returns exchange
+        :param loc_found: Location string
+     """
     exchange = {
         'GER': 'XETRA',
         'BER': 'Berlin',
@@ -71,10 +74,10 @@ def __switch_exchange(loc_found):
         return exchange[loc_found]
     else:
         logger.debug("Didn't find Exchange for Location: %s " % loc_found)
-        return loc_found
+        return 'XETRA'
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
     # print(get_stock_info("VOW.DE"))
+    s = get_stock_info("VOW.DE")
     print(lookup_symbol(name="volkswagen-ag")[0])

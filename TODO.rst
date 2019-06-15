@@ -8,6 +8,14 @@ Features
 
 TODO:
 *********
+
+- minimize requests
+- implement nicer code, e.g. property decorators
+- write the documentation
+
+
+
+
 - change argparse to use subcommand e.g:
   "./stockananalyser add [-d <SYM> <URL>]"
   "./stockananalyser show [-v -d]"
@@ -20,9 +28,6 @@ TODO:
 
 - allow to show data/scores of all stores stocks
 - ask for quarterly release date when showin
-- get stock symbol from onvista page
-- get quarterly figure release dates from finanzen.net
-- allow to store quarterly release date figures of the future
 - get current stock quote from onvista page instead of from yahoo
 - add CLI:
  - allow to enter new STocks with symbol
