@@ -1,0 +1,9 @@
+
+*************************************
+Read the Docs Levermann Stockanalyser
+*************************************
+
+The ``Stockanalyser Levermann`` downloads financial data from the web and calculates the Levermann-Score_.
+
+
+.. _levermann-score: https://levermann24.com/levermann-strategie/?lang=en

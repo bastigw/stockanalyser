@@ -1,12 +1,13 @@
 Features
 ========
-- save/load stock data from file
+- save/load stock data from databse
 - get stock data (prices, etc) from yahoo or other websites
 - recalculate stock rating periodically
 - save old stock ratings
 
 
-# TODO: 
+TODO:
+*********
 - change argparse to use subcommand e.g:
   "./stockananalyser add [-d <SYM> <URL>]"
   "./stockananalyser show [-v -d]"
@@ -35,8 +36,7 @@ Features
   (getting quotes on weekend  days, year breaks, etc)
 - only ask for stock data that is outdated on the CLI
 - Store portfolio
-- store objects as JSON instead of using pickle? Would make it easier to
-  transist objects to new versions?
+- store data in a local or remote database
 - Rename input module, to not clash with the naming of the input() function
 - make levermann evaluation threaded to speed it up (YQL queries take lot of
   time)
