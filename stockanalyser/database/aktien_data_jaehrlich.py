@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 # Flask settings.
 DEBUG = bool(os.environ.get('DEBUG'))
-SECRET_KEY = 'secret - change me'  # TODO: change me.
+# SECRET_KEY = 'secret - change me'  # TODO: change me.
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -126,7 +126,7 @@ def sort_quarterly_dates(quarterly_figure_dates: list, year: int) -> list:
     return this_year_quarterly
 
 
-# TODO fix langugae
+# TODO fix langugae: Create Tables in English not German!!
 def row_get(aktien_id: int, year: int):
     row = AktienJaehrlicheDaten.get_or_none(
         (AktienJaehrlicheDaten.aktie_id == aktien_id) & (AktienJaehrlicheDaten.jahr == year))
@@ -156,11 +156,3 @@ def before_request():
 def after_request(response):
     g.db.close()
     return response
-
-
-# app.run(debug=True)
-
-if __name__ == '__main__':
-    pass
-    # rows = row_update(1, 2019, {'ebit': -0.9, 'kgv': -3.9})
-    # print(rows)

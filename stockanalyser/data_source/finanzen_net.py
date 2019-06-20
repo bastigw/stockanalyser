@@ -1,6 +1,7 @@
 from urllib import request, parse
 from datetime import datetime
 import logging
+import re
 
 from stockanalyser.data_source import common
 
@@ -109,8 +110,9 @@ class FinanzenNetScraper(object):
         element = self.etree
         if element is not None:
             benchmark = element.xpath(
-                '/html/body/div[2]/div[6]/div[3]/'
-                'div[28]/div[3]/div[1]/table/tr')
+                '/html/body/div[1]/div[6]/div[3]/'
+                'div[29]/div[3]/div[1]/table/tr')
+            # /html/body/div[1]/div[6]/div[3]/div[29]/div[3]/div[1]/table/tbody/tr[3]/td[2]/a[1]
             for row in benchmark:
                 if row[0].text_content() == 'Indizes':
                     benchmark = row[1][0].text_content()
@@ -135,7 +137,7 @@ class FinanzenNetScraper(object):
         if not self.URL:
             self.lookup_url()
         name = self.URL.split("/")[-1]
-        name = name.replace("-Aktie", "")
+        name = re.sub("-Aktie", "", name, flags=re.IGNORECASE)
         name = name.replace("_", "-")
         self._name = name
         return self._name
