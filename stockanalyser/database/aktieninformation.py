@@ -3,6 +3,7 @@ import os
 from flask import Flask, g
 from peewee import *
 import logging
+from playhouse import shortcuts
 
 logger = logging.getLogger(__name__)
 
@@ -110,7 +111,12 @@ def find_data_entry(fields: str or int) -> dict:
         except ValueError:
             continue
         if row:
-            return row.__dict__['__data__']
+            return shortcuts.model_to_dict(row)
+    return {None}
+
+
+def get_by_id(aktien_id: int):
+    return AktienInformation.get_by_id(aktien_id)
 
 
 # Request handlers -- these two hooks are provided by flask and we will use
@@ -125,9 +131,3 @@ def before_request():
 def after_request(response):
     g.db.close()
     return response
-
-
-logger.info("Connected to database {}".format(database.database))
-
-if __name__ == '__main__':
-    find_data_entry(1)
