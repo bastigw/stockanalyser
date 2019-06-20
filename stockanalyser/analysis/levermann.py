@@ -102,11 +102,11 @@ class Levermann(object):
 
     def _set_reference_index(self) -> str:
         if self.stock.cap_type == Cap.LARGE:
-            return "^GDAXI"
+            return "DAX"
         elif self.stock.cap_type == Cap.MID:
-            return "^MDAXI"
+            return "MDAX"
         elif self.stock.cap_type == Cap.SMALL:
-            return "^SDAXI"
+            return "SDAX"
         else:
             raise NotSupportedError(
                 "Only DAX Stocks are supported. The stock symbol has to end "
@@ -336,7 +336,7 @@ class Levermann(object):
 
     def _eval_three_month_reversal(self):
         logger.debug("Evaluating 3 month reversal")
-        try:
+        try:  # TODO change single char variable
             if self.stock.cap_type != Cap.LARGE:
                 return CriteriaRating((None, None, None), 0)
             d = common.prev_month(date.today())
@@ -421,7 +421,7 @@ class Levermann(object):
                      "quarterly figures")
         try:
             qf_date = self.stock.last_quarterly_figures_release_date()
-            qf_prev_day = common.prev_weekday(
+            qf_prev_day = common.prev_work_day(
                 self.stock.last_quarterly_figures_release_date())
 
             if qf_prev_day is None:
@@ -432,10 +432,12 @@ class Levermann(object):
             qf_day_quote = self.stock.OS.get_historic_data(qf_date)
             qf_reaction = ((qf_day_quote / qf_previous_day_quote) - 1) * 100
 
-            ref_index_quote = self.stock.OS.get_historic_data(qf_date)
+            ref_index_quote = self.stock.OS.get_historic_data(
+                qf_date, index=self.reference_index)
             ref_previous_index_quote = self.stock.OS.get_historic_data(
-                qf_prev_day)
-            ref_index_chg = (((ref_index_quote / ref_previous_index_quote) - 1) * 100)
+                qf_prev_day, index=self.reference_index)
+            ref_index_chg = (
+                ((ref_index_quote / ref_previous_index_quote) - 1) * 100)
 
             rel_qf_reaction = qf_reaction - ref_index_chg
             logger.debug(
