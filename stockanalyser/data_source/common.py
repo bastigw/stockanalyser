@@ -5,21 +5,26 @@ Functions that are used by all modules in this package!
 
 """
 
-import datetime
 import asyncio
-import time
-import urllib.request
-import pathlib
-import numpy as np
-from typing import Union
-from lxml import html
+import datetime
 import logging
+import pathlib
+import urllib.request
+from typing import Union
+
+import holidays
+import numpy as np
+from lxml import html
+
+from stockanalyser import exceptions
 
 logger = logging.getLogger(__name__)
 
 SLEEP = 10
 
 url_last = ''
+holidays_germany = holidays.DE()
+
 
 """ All request and HTML-Element handling """
 
@@ -84,6 +89,15 @@ def solve_xpath(etree: html, xpath: str):
 """Date calculation and formatting"""
 
 
+def prev_work_day(adate: Union[str, datetime.date, datetime.date]):
+    """Returns date that is not on a Weekend and is not a german holiday"""
+    adate = convert_to_datetime(adate)
+    prev_day = prev_weekday(adate)
+    if is_german_holiday(prev_day):
+        return prev_work_day(prev_day)
+    return prev_day
+
+
 def german_date_to_normal(date, str_format):
     replacements = {
         "ä": "a",
@@ -103,11 +117,11 @@ def date_difference(date_start, date_end=None):
     Calculate date difference between dates
 
     :param date_start: Older date
-    :param date_end: If None = Today, else newer date
+    :param date_end: If None = Today, else date_end
     :return: int of date difference
     """
-    if not is_weekday(date_start):
-        date_start = prev_weekday(date_start)
+    # if not is_weekday(date_start):
+    # date_start = prev_weekday(date_start)
     if not date_end:
         date_end = datetime.datetime.now()
     if isinstance(date_start, datetime.datetime):
@@ -126,9 +140,9 @@ def is_weekday(adate: Union[str, datetime.datetime, datetime.date]) -> bool:
     :param adate: Date string or datetime object
     """
     adate = convert_to_datetime(adate)
-    if adate.isoweekday() not in (6, 7):
-        return True
-    return False
+    if adate.isoweekday() in (6, 7):
+        return False
+    return True
 
 
 def prev_weekday(adate: Union[str, datetime.datetime, datetime.date]):
@@ -138,6 +152,7 @@ def prev_weekday(adate: Union[str, datetime.datetime, datetime.date]):
             adate = convert_to_datetime(adate)
         _offset = (3, 1, 1, 1, 1, 1, 2)[adate.isoweekday() - 1]
         return adate - datetime.timedelta(days=_offset)
+    return None
 
 
 def closest_weekday(adate):
@@ -145,9 +160,14 @@ def closest_weekday(adate):
 
             * Saturday -> Friday before
             * Sunday -> Monday after
+                - If monday after is not in the future
     :return: datetime
         """
+    if isinstance(adate, datetime.datetime):
+        adate = adate.date()
     if adate.isoweekday() == 7:
+        if (adate + datetime.timedelta(days=1)) > datetime.date.today():
+            return adate - datetime.timedelta(days=2)
         return adate + datetime.timedelta(days=1)
     elif adate.isoweekday() == 6:
         return adate - datetime.timedelta(days=1)
@@ -161,19 +181,24 @@ def convert_to_datetime(adate):
             return datetime.datetime.strptime(adate, "%d.%m.%Y")
         except ValueError as e:
             logger.exception(e)
+            raise exceptions.DataTypeNotSupportedError(
+                "Only str in the format: '%d.%m.%Y' or datetime."
+                "datetime and datetime.date are supported.")
     if isinstance(adate, (datetime.datetime, datetime.date)):
         return adate
 
 
 def prev_month(adate):
-    if adate.month == 1:
-        return datetime.date(year=datetime.date.today().year - 1, month=12,
-                             day=prev_weekday(datetime.date(
-                                 year=datetime.date.today().year - 1, month=12,
-                                 day=22)).day)  # New Years Chaos, takes day before Christmas
-    else:
-        return datetime.date(adate.year, adate.month, 1) - datetime.timedelta(
-            days=1)
+    return datetime.date(adate.year, adate.month, 1) - datetime.timedelta(days=1)
+
+
+def is_german_holiday(adate: datetime.date):
+    if datetime.date(adate.year, 12, 31) not in holidays_germany:
+        holidays_germany.append(
+            {datetime.date(adate.year, 12, 31): 'Silvester'})
+    if adate in holidays_germany:
+        return True
+    return False
 
 
 if __name__ == '__main__':
