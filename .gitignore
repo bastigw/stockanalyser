@@ -2,10 +2,11 @@
 *.swp
 *.swo
 *~
-.idea/
+.vscode/
+.pytest_cache/
 API/
 tests/
 data/*.pickle
-venv/
+virtualenv/
 *test*
 html/
