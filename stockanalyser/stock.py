@@ -84,7 +84,7 @@ class Stock(object):
         if not (isin or name):
             logger.critical("No arguments")
             exit(-1)
-        self.save_information = False
+        self.save_information = True
         self.name = name
         self.ISIN = isin
         self.exchange = None
@@ -128,6 +128,7 @@ class Stock(object):
             self.quarterly_figure_dates = self.FNS.quarterly_figure_dates
             self.consensus_ratings = self.MSS.consensus
             self.eval_earning_revision_cy, self.eval_earning_revision_ny = self.MSS.revisions
+            self.save()
 
     def __set_isin_urls_symb(self, isin=None, name=None):
         data = self.__get_isin_urls_symb_from_database(isin=isin, name=name)
@@ -138,14 +139,13 @@ class Stock(object):
 
     @staticmethod
     def __get_isin_urls_symb_from_database(isin=None, name=None) -> dict:
-        key = None
-        key = isin if not key and isin else key
-        key = name if not key and name else key
+        if isin is not None:
+            key = isin
+        else:
+            key = name
         return database_interface.find_entry_in_aktieninformation(key)  # dict
 
     def __set_isin_urls_symb_online(self, isin=None, name=None) -> dict:
-        # finanzen_net_url: str
-        # benchmark: str
         if not isin and name:
             fns = FinanzenNetScraper(name=name)
             fns.lookup_url()
