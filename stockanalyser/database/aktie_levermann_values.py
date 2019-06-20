@@ -1,7 +1,8 @@
 from peewee import *
 from datetime import datetime
 
-from database import aktieninformation
+from stockanalyser.database import aktieninformation
+# from database import aktieninformation
 
 database = MySQLDatabase('aktien-test',
                          **{'charset': 'utf8', 'use_unicode': True,
@@ -78,7 +79,7 @@ def _prep_data(levermann):
     data = {
         'analyst_bewertung': analyst_ratings[0],
         'analysten_anzahl': analyst_ratings[1],
-        'datum': datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
+        'datum': datetime.today().strftime("%Y-%m-% %H:%M:%S"),
         'gewinn': eps[0],
         'gewinn_nj': eps[1],
         'gewinn_veraenderung': levermann.stock.eval_earning_revision_cy['Change current Year'],

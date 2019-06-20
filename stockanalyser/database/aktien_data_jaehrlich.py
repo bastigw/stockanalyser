@@ -3,7 +3,8 @@ import os
 from flask import Flask, g
 from peewee import *
 
-from database import aktieninformation
+# from database import aktieninformation
+from stockanalyser.database import aktieninformation
 import logging
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,6 @@
 from peewee import *
-from database import aktieninformation
+from stockanalyser.database import aktieninformation
+# from database import aktieninformation
 from datetime import datetime
 
 
