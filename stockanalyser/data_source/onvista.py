@@ -4,6 +4,7 @@ Gets all data from the onvista.de webpage!
 """
 
 import re
+import json
 import urllib.request
 import datetime
 import csv
@@ -16,7 +17,7 @@ from stockanalyser.data_source import common
 logger = logging.getLogger(__name__)
 
 BENCHMARKS = {
-    "DAX 30": {
+    "DAX": {
         "notation_id": 20735,
     },
     "MDAX": {
@@ -31,7 +32,7 @@ BENCHMARKS = {
 }
 
 
-def is_number(txt) -> bool:
+def is_number(txt: str) -> bool:
     """ Tries to convert string into number """
     try:
         float(txt)
@@ -108,7 +109,7 @@ class OnvistaScraper(object):
 
     @property
     def notation_id(self):
-        """ Notation ID for historic data """
+        """ Notation ID. Required for historic data """
         if self._notation_id is None:
             self._notation_id = self._get_notation_id()
         return self._notation_id
@@ -162,49 +163,41 @@ class OnvistaScraper(object):
                 notation_id = li.get("href").split("=")[1]
                 return notation_id
 
-    def get_historic_data(self,
-                          day: Union[str, datetime.datetime, datetime.date]) \
-            -> Union[float, None]:
-        if isinstance(day, (str, datetime.datetime, datetime.date)):
-            if common.is_weekday(day):
-                day = common.convert_to_datetime(day)
-            else:
-                day = common.prev_weekday(day)
+    def get_historic_data(self, day: Union[datetime.datetime, datetime.date], index=None) -> Union[float, None]:
+        """Gets close of historical date"""
+        if index is None:
+            notation_id = self.notation_id
         else:
-            raise exceptions.DataTypeNotSupportedError(
-                "Only str in the format: '%d.%m.%Y' or datetime."
-                "datetime and datetime.date are supported.")
+            notation_id = BENCHMARKS[index]['notation_id']
         day = day.strftime("%d.%m.%Y")
-        url = "http://www.onvista.de/onvista/boxes/historicalquote/" \
-              "export.csv?notationId={}&dateStart={}&interval=M1".format(
-                  self.notation_id, day)  # 323547
-        str_onivista_historic = common.request_url_to_str(url).decode("utf-8")
-        csv_onvista_historic = csv.reader(str_onivista_historic.splitlines(),
-                                          delimiter=";")
-        for row in csv_onvista_historic:
-            if row[0].strip() == day:
-                # float(x) can't handle dots and commas -> format string
-                row[-2] = _normalize_number(row[-2])
-                return float(row[-2])
-        return None
+        url = "https://www.onvista.de/onvista/boxes/popup/historicalquote.json?notationId={}&dateStart={}&interval=M1".format(
+            notation_id, day)  # 323547
+        response = common.request_url_to_str(url).decode('utf-8')
+        response = json.loads(response)
+        close = response['close'].replace('.', '')
+        close = close.replace(',', '.')
+        return float(close)
 
     @staticmethod
     def _get_table_header(header):
-        # onvista uses 2 different presentation for the year:
-        # "18/19e   17/18e  16/17e  15/16" and
-        # "2019e    2018e   2017e   2016e"
+        """Loops through table header to find years
+            Standard: 2019 2018 2017 2016
+            onvista uses 2 different presentation for the year:
+            "18/19e   17/18e  16/17e  15/16" and
+            "2019e    2018e   2017e   2016e"
+        """
         theader = []
         for column in header:
             value = column.text.lower().strip()
             if not len(value):
                 continue
-            # handle presentation of years as
-            # "18/19e   17/18e  16/17e  15/16", convert them to the
-            # YYYY (eg 2018) format
+            r""" handle presentation of years as
+             "18/19e   17/18e  16/17e  15/16", convert them to the
+             YYYY (eg 2018) format"""
             if "/" in value:
                 value = "20" + value.split("/")[1]
             # remove the "e" for estimated from year endings
-            if re.match("\d+e", value):
+            if re.match(r"\d+e", value):
                 value = int(value[:-1])
             elif is_number(value):
                 value = int(value)
@@ -319,7 +312,7 @@ class OnvistaScraper(object):
 
     def _get_market_cap(self) -> float:
         xapth_market_cap = '//*[@id="ONVISTA"]/div[1]/div[1]/div[1]/article' \
-                           '/div[6]/section[8]/article/div/table[1]/tbody/tr' \
+                           '/div[7]/section[8]/article/div/table[1]/tbody/tr' \
                            '/td[1]/text()'
         market_cap = common.solve_xpath(self.__overview_url_etree,
                                         xapth_market_cap)[0]
@@ -342,7 +335,7 @@ def _normalize_number(value: str) -> Union[None, str, float]:
     if value in ("", " "):
         return "CONTINUE"
     # replace german decimal seperator "," with "."
-    number = re.search('[+|-]?([\d|\.]{0,12},\d{0,2})%?', value)
+    number = re.search(r'[+|-]?([\d|\.]{0,12},\d{0,2})%?', value)
     if number is None:
         return value
     else:
