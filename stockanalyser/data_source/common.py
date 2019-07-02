@@ -14,7 +14,7 @@ from typing import Union
 
 import holidays
 import numpy as np
-from lxml import html
+from lxml import html, etree
 
 from stockanalyser import exceptions
 
@@ -58,6 +58,10 @@ def request_url_to_str(url: str):
 def str_to_etree(response_read):
     logger.debug("Parsing string to etree")
     return html.fromstring(response_read)
+
+
+def tostring(etree_element):
+    return etree.tostring(etree_element)
 
 
 def get_random_ua():
