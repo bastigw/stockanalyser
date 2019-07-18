@@ -16,26 +16,14 @@ import logging
 import pickle
 from enum import Enum, unique
 
-
-from database import database_interface
 from stockanalyser import fileutils
 from stockanalyser.config import *
 from stockanalyser.data_source.finanzen_net import FinanzenNetScraper
 from stockanalyser.data_source.marketscreener import MarketScreenerScraper
 from stockanalyser.data_source.onvista import OnvistaScraper
+from stockanalyser.database import database_interface
 
 logger = logging.getLogger(__name__)
-
-
-def _stock_pickle_path(symbol, data_path=DATA_PATH):
-    filename = fileutils.to_pickle_filename(symbol)
-    path = os.path.join(data_path, filename)
-    return path
-
-
-def _unpickle_stock(symbol):
-    path = _stock_pickle_path(symbol)
-    return pickle.load(open(path, "rb"))
 
 
 def _save(stock):
@@ -84,7 +72,7 @@ class Stock(object):
         if not (isin or name):
             logger.critical("No arguments")
             exit(-1)
-        self.save_information = True
+        self.save_information = False
         self.name = name
         self.ISIN = isin
         self.exchange = None
@@ -126,13 +114,13 @@ class Stock(object):
             self.eps = self.OS.eps
             self.per = self.OS.per
             self.quarterly_figure_dates = self.FNS.quarterly_figure_dates
-            self.consensus_ratings = self.MSS.consensus
+            self.consensus_ratings = self.MSS.consensus_data
             self.eval_earning_revision_cy, self.eval_earning_revision_ny = self.MSS.revisions
             self.save()
 
     def __set_isin_urls_symb(self, isin=None, name=None):
         data = self.__get_isin_urls_symb_from_database(isin=isin, name=name)
-        if not data:
+        if data is None:
             self.save_information = True
             data = self.__set_isin_urls_symb_online(isin=isin, name=name)
         return data
