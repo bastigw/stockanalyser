@@ -104,16 +104,24 @@ class FinanzenNetScraper(object):
             release_dates))
         self._quarterly_figures_dates = release_dates
 
-    def _get_benchmark(self):
+    def _get_benchmark(self):  # TODO add support for different xpath (trial and error)
         if self.etree is None:
             self.lookup_url()
         element = self.etree
+        xpaths = [
+            "/html/body/div[1]/div[6]/div[3]/div[27]/div[3]/div[1]/table/tr[3]/td[2]/a[1]",
+            "/html/body/div[1]/div[6]/div[3]/div[27]/div[3]/div[1]/table/tr[4]/td[2]/a[1]"
+        ]
         if element is not None:
-            benchmark = element.xpath(
-                "/html/body/div[1]/div[6]/div[3]/div[27]/div[3]/div[1]/table/tr[3]/td[2]/a[1]")[0].text_content()
-            # /html/body/div[1]/div[6]/div[3]/div[29]/div[3]/div[1]/table/tbody/tr[3]/td[2]/a[1]
-            # /html/body/div[1]/div[6]/div[3]/div[27]/div[3]/div[1]/table/tbody/tr[3]/td[2]/a[1]
-            self._benchmark = benchmark
+            for xpath in xpaths:
+                try:
+                    benchmark = element.xpath(xpath)[0].text_content()
+                    if bool(re.match(r"dax", benchmark, re.I)):
+                        self._benchmark = benchmark
+                        break
+                except IndexError as err:
+                    logger.error(err)
+
         else:
             logger.warning("Etree not defined")
 
