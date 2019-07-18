@@ -197,12 +197,35 @@ def prev_month(adate):
 
 
 def is_german_holiday(adate: datetime.date):
+    """Checks if date is a german holiday
+
+    Arguments:
+        adate {datetime.date} -- Datetime object to check
+
+    Returns:
+        boolean -- if it's a german holiday: True
+    """
     if datetime.date(adate.year, 12, 31) not in holidays_germany:
         holidays_germany.append(
             {datetime.date(adate.year, 12, 31): 'Silvester'})
     if adate in holidays_germany:
         return True
     return False
+
+
+def unixtime_to_datetime(timestamp, milliseconds: bool = True) -> datetime.datetime:
+    """Converts unixtime to datetime object
+
+    Keyword Arguments:
+        milliseconds {int} -- if input int or str is with millisecond accuracy (default: {True})
+    """
+    timestamp = str(timestamp)
+    if milliseconds:
+        timestamp = timestamp[:-3]
+    if len(timestamp) > 10:
+        raise AttributeError(
+            "This is not a unix timestamp {}".format(timestamp))
+    return datetime.datetime.utcfromtimestamp(int(timestamp))
 
 
 if __name__ == '__main__':
