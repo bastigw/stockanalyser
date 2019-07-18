@@ -110,17 +110,14 @@ class FinanzenNetScraper(object):
         element = self.etree
         if element is not None:
             benchmark = element.xpath(
-                '/html/body/div[1]/div[6]/div[3]/'
-                'div[29]/div[3]/div[1]/table/tr')
+                "/html/body/div[1]/div[6]/div[3]/div[27]/div[3]/div[1]/table/tr[3]/td[2]/a[1]")[0].text_content()
             # /html/body/div[1]/div[6]/div[3]/div[29]/div[3]/div[1]/table/tbody/tr[3]/td[2]/a[1]
-            for row in benchmark:
-                if row[0].text_content() == 'Indizes':
-                    benchmark = row[1][0].text_content()
+            # /html/body/div[1]/div[6]/div[3]/div[27]/div[3]/div[1]/table/tbody/tr[3]/td[2]/a[1]
             self._benchmark = benchmark
         else:
             logger.warning("Etree not defined")
 
-    @property
+    @property  # TODO Test me: possibly not working correctly
     def benchmark(self):
         if not self._benchmark:
             self._get_benchmark()
