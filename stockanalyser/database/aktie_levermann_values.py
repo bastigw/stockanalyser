@@ -73,12 +73,11 @@ def save_points(levermann) -> int:
 
 def _prep_data(levermann):
     eps = _prep_eps(levermann.stock.eps)
-    analyst_ratings = _prep_analyst_ratings(levermann.stock.consensus_ratings)
     quarterly_reaction = levermann.eval_quarterly_figures_reaction(
         case='sql_data')
     data = {
-        'analyst_bewertung': analyst_ratings[0],
-        'analysten_anzahl': analyst_ratings[1],
+        'analyst_bewertung': levermann.stock.consensus_ratings["consensus"],
+        'analysten_anzahl': levermann.stock.consensus_ratings["n_analysts"],
         'datum': datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
         'gewinn': eps[0],
         'gewinn_nj': eps[1],
@@ -88,7 +87,6 @@ def _prep_data(levermann):
         'kgv': levermann.stock.per[datetime.today().year],
         'kgv_5': levermann.stock.five_year_per,
         'kurs': levermann.stock.quote,
-        'kurs_ziel': levermann.stock.consensus_ratings["price_target_average"],
         'quartalszahlen_letzte': levermann.stock.last_quarterly_figures_release_date(),
         'veraenderung_index_quartaltag': quarterly_reaction[1],
         'veraenderung_kurs_quartaltag': quarterly_reaction[0],
@@ -109,18 +107,3 @@ def _prep_eps(eps: dict) -> tuple:
         eps_cur_year = eps[this_year - 1]
 
     return eps_cur_year, eps_next_year
-
-
-def _prep_analyst_ratings(rating: dict) -> tuple:
-    consensus = rating["consensus"]
-    number_of_analysts = int(rating["n_of_analysts"])
-    ratings = {
-        "KAUFEN": 1,
-        "AUFSTOCKEN": 2,
-        "HALTEN": 3,
-        "REDUZIEREN": 4,
-        "VERKAUFEN": 5
-    }
-    score = ratings[consensus]
-
-    return score, number_of_analysts

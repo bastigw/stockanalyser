@@ -61,7 +61,7 @@ def insert_data(stock_object) -> int:
             'groeße': stock_object.cap_type.__str__() if hasattr(stock_object,
                                                                  'cap_type') else 'X',
             'isin': stock_object.ISIN,
-            'marketscreener_id': stock_object.MSS.id,
+            'marketscreener_id': stock_object.MSS.codeZB,
             'marketscreener_url': stock_object.MSS.URL,
             'onvista_url': stock_object.OS.overview_url,
             'notation_id': stock_object.OS.notation_id,
@@ -112,7 +112,7 @@ def find_data_entry(fields: str or int) -> dict:
             continue
         if row:
             return shortcuts.model_to_dict(row)
-    return {None}
+    return None
 
 
 def get_by_id(aktien_id: int):

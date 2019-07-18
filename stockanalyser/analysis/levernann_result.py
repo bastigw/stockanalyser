@@ -1,7 +1,7 @@
 import datetime
-
-from database import database_interface
 import logging
+
+from stockanalyser.database import database_interface
 
 logger = logging.getLogger(__name__)
 

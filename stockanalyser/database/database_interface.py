@@ -1,4 +1,4 @@
-from database import aktieninformation, aktien_data_jaehrlich, \
+from stockanalyser.database import aktieninformation, aktien_data_jaehrlich, \
     aktie_levermann_result, aktie_levermann_values
 import logging
 

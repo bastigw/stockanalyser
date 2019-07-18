@@ -97,19 +97,19 @@ def _yearly_prepare_dict(stock_object, aktie_id: int, year: int) -> dict:
     if year in ebit.keys():
         sql_data['ebit'] = ebit[year]
     else:
-        sql_data['ebit'] = -1
+        sql_data['ebit'] = None
     if year in roe.keys():
         sql_data['return_on_equity'] = roe[year]
     else:
-        sql_data['return_on_equity'] = -1
+        sql_data['return_on_equity'] = None
     if year in equity_ratio.keys():
         sql_data['eigenkapitalquote'] = equity_ratio[year]
     else:
-        sql_data['eigenkapitalquote'] = -1
+        sql_data['eigenkapitalquote'] = None
     if year in per.keys():
         sql_data['kgv'] = per[year]
     else:
-        sql_data['kgv'] = -1
+        sql_data['kgv'] = None
 
     this_year_quarterly = sort_quarterly_dates(quarterly_figure_dates, year)
     for idx, elem in enumerate(this_year_quarterly[::-1]):
