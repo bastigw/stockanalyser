@@ -3,6 +3,7 @@ import logging
 import re
 
 from stockanalyser.data_source import common
+from stockanalyser import exceptions
 
 logger = logging.getLogger(__name__)
 
@@ -38,29 +39,29 @@ class MarketScreenerScraper(object):
     @property
     def revisions(self):
         if not (self._data_revision_cy and self._data_revision_ny):
-            self._set_revison()
+            self._set_revision()
         return self._data_revision_cy, self._data_revision_ny
 
     def _lookup_url(self):
-        # xpath = '//*[@id="ALNI0"]/tr'
-        xpath = '//*[@id="ALNI0"]/tr/td/div[1]/table/tr/td[2]/a/@href'
         if self.ISIN:
             url = self.BASE_SEARCH_URL + self.ISIN
         else:
             url = self.BASE_SEARCH_URL + self.name
         lxml_html = common.url_to_etree(url)
-        # for elem in lxml_html.xpath(xpath)[1:]:
-        # Name from marketscraper.net website
-        # symb = elem.xpath('./td[1]')[0].text_content().encode("utf-8").decode("utf-8")
-        # country = elem.xpath('./td[2]/img/@title')[0].encode("utf-8").decode("utf-8")
-        # href = "https://de.marketscreener.com" + elem.xpath('./td[3]/a/@href')[0].encode("utf-8").decode("utf-8")
-        # exchange = elem.xpath('./td[7]')[0].text_content().encode("utf-8").decode("utf-8")
-        # if exchange.lower() in self.exchange:
-        # logger.debug("Got URL: {}!".format(href))
-        # return href
-        href = lxml_html.xpath(xpath)[0]
-        # href = href.encode("utf-8").decode("utf-8")
-        return "https://de.marketscreener.com" + href
+        xpath = '//*[@id="ALNI0"]'
+        children = lxml_html.xpath(xpath)[0].getchildren()
+        for child in children:
+            child = common.str_to_etree(common.tostring(child))
+            src = dict(child
+                       .xpath("//td/div[1]/table/tr/td[1]/img")[0]
+                       .attrib
+                       )['src']
+            if src.endswith("de.png"):
+                return "https://de.marketscreener.com" + dict(child
+                                                              .xpath("//*/td/div[1]/table/tr/td[2]/a")[0]
+                                                              .attrib
+                                                              )['href']
+        raise exceptions.MissingDataError("Couldn't find link to stock")
 
     def _lookup_id(self):
         xpath = '//*[@id="zbCenter"]/div/span/table[4]/tr/td[1]/table[1]/tr[2]/td/div[2]/a/@href'
@@ -70,29 +71,30 @@ class MarketScreenerScraper(object):
         id_marketscreener = link.split("&")[1][6:]
         return id_marketscreener
 
-    def _set_revison(self):
+    def _set_revision(self):
         url = "https://de.marketscreener.com//reuters_charts/afDataFeed.php?repNo={}&codeZB=&t=rev&sub_t=bna&iLang=1".format(
             self.id)
         data = json.loads(common.request_url_to_str(url))
-        eps_four_weeks_cy = data[0][0][-3][1]
-        date_four_weeks_cy = data[0][0][-3][0]
-        date_four_weeks_cy = common.german_date_to_normal(
-            date_four_weeks_cy, "%b %Y")
+        eps_four_weeks_cy = data[0][0][-20][1]
+        date_four_weeks_cy = data[0][0][-20][0]
+        date_four_weeks_cy = common.unixtime_to_datetime(
+            date_four_weeks_cy, milliseconds=True)
 
         eps_today_cy = data[0][0][-1][1]
         date_today_cy = data[0][0][-1][0]
-        date_today_cy = common.german_date_to_normal(date_today_cy, "%d.%m.%Y")
+        date_today_cy = common.unixtime_to_datetime(
+            date_today_cy, milliseconds=True)
         change_cy = (eps_today_cy / eps_four_weeks_cy) * 100 - 100
         change_cy = round(change_cy, 2)
 
-        eps_four_weeks_ny = data[0][1][-3][1]
-        date_four_weeks_ny = data[0][1][-3][0]
-        date_four_weeks_ny = common.german_date_to_normal(
-            date_four_weeks_ny, "%b %Y")
+        eps_four_weeks_ny = data[0][1][-20][1]
+        date_four_weeks_ny = data[0][1][-20][0]
+        date_four_weeks_ny = common.unixtime_to_datetime(
+            date_four_weeks_ny, True)
 
         eps_today_ny = data[0][1][-1][1]
         date_today_ny = data[0][0][-1][0]
-        date_today_ny = common.german_date_to_normal(date_today_ny, "%d.%m.%Y")
+        date_today_ny = common.unixtime_to_datetime(date_today_ny, True)
 
         change_ny = (eps_today_ny / eps_four_weeks_ny) * 100 - 100
         change_ny = round(change_ny, 2)
@@ -114,22 +116,14 @@ class MarketScreenerScraper(object):
             xpath + "[2]/td[2]")[0].text_content().replace(" ", "").replace("\n", "").replace("\r", "")
         self._data_consensus["price_target_average"] = float(
             url_response.xpath(xpath + "[3]/td[2]")[0].text_content().replace(" ", "").replace("\n", "").replace("\r", "").replace(',', '.').replace(u'\xa0', u'').strip("€"))
-        self._data_consensus["out_of_ten"] = float(
-            re.findall(
-                r'(\d.?\d?\d?) \/ 10',
-                url_response.xpath(
-                    '//*[@id="zbCenter"]/div/span/table[4]/tr/td[3]/div[2]/div[1]/div/div[2]/table/tr/td[2]/table/@title')[0]
-            )[0])
+        try:
+            self._data_consensus["out_of_ten"] = float(
+                re.findall(
+                    r'(\d.?\d?\d?) \/ 10',
+                    url_response.xpath(
+                        '//*[@id="zbCenter"]/div/span/table[4]/tr/td[3]/div[2]/div[1]/div/div[2]/table/tr/td[2]/table/@title')[0]
+                )[0])
+        except IndexError as e:
+            logger.error(e)
 
         # return self._data_consensus
-
-
-if __name__ == '__main__':
-    ms = MarketScreenerScraper(isin="DE000A1DAHH0")
-    # print(ms.consensus)
-    print(ms.URL)
-    # ms._set_consensus()
-    # print(ms.data_consensus)
-    # for x, y in ms.data_consensus.items():
-    #     print(x)
-    #     print(y)
