@@ -112,8 +112,7 @@ def german_date_to_normal(date, str_format):
 
     for old, new in replacements.items():
         date = date.replace(old, new)
-    dt = datetime.datetime.strptime(date, str_format)
-    return dt
+    return datetime.datetime.strptime(date, str_format)
 
 
 def date_difference(date_start, date_end=None):
@@ -213,11 +212,20 @@ def is_german_holiday(adate: datetime.date):
     return False
 
 
-def unixtime_to_datetime(timestamp, milliseconds: bool = True) -> datetime.datetime:
+def unixtime_to_datetime(timestamp, milliseconds: bool = False) -> datetime.datetime:
     """Converts unixtime to datetime object
 
+    Arguments:
+        timestamp {int or str} -- timestamp (len: 10)
+
     Keyword Arguments:
-        milliseconds {int} -- if input int or str is with millisecond accuracy (default: {True})
+        milliseconds {bool} -- if timestamp is with millisecond accuracy  (default: {False})
+
+    Raises:
+        AttributeError: if timesamp has wrong length
+
+    Returns:
+        datetime.datetime -- datetime object
     """
     timestamp = str(timestamp)
     if milliseconds:
