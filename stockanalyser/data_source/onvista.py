@@ -1,4 +1,4 @@
-""" Onivsta Scraper
+""" Onvista Scraper
 Gets all data from the onvista.de webpage!
 
 """
@@ -18,6 +18,9 @@ logger = logging.getLogger(__name__)
 
 BENCHMARKS = {
     "DAX": {
+        "notation_id": 20735,
+    },
+    "DAX 30": {
         "notation_id": 20735,
     },
     "MDAX": {
@@ -43,7 +46,7 @@ def is_number(txt: str) -> bool:
 
 class OnvistaScraper(object):
     """
-    OnivstaScraper Class
+    OnvistaScraper Class
 
 
     """
@@ -311,12 +314,21 @@ class OnvistaScraper(object):
         return float(_normalize_number(previous_close))
 
     def _get_market_cap(self) -> float:
-        xapth_market_cap = '//*[@id="ONVISTA"]/div[1]/div[1]/div[1]/article' \
-                           '/div[7]/section[8]/article/div/table[1]/tbody/tr' \
-                           '/td[1]/text()'
+        xapth_market_cap_8 = '//*[@id="ONVISTA"]/div[1]/div[1]/div[1]/article' \
+            '/div[7]/section[8]/article/div/table[1]/tbody/tr' \
+            '/td[1]/text()'
+        xapth_market_cap_7 = '//*[@id="ONVISTA"]/div[1]/div[1]/div[1]/article' \
+            '/div[7]/section[7]/article/div/table[1]/tbody/tr' \
+            '/td[1]/text()'
         market_cap = common.solve_xpath(self.__overview_url_etree,
-                                        xapth_market_cap)[0]
-        return self.__configure_market_cap(market_cap)
+                                        xapth_market_cap_8)
+        if not market_cap:
+            market_cap = common.solve_xpath(self.__overview_url_etree,
+                                            xapth_market_cap_7)
+        if not market_cap:
+            raise exceptions.MissingDataError(
+                "Couldn't find market capitalization")
+        return self.__configure_market_cap(market_cap[0])
 
     def __configure_market_cap(self, market_cap: str) -> int:
         if market_cap.endswith("Mio EUR"):
@@ -343,20 +355,3 @@ def _normalize_number(value: str) -> Union[None, str, float]:
         number = number.replace(".", "")
         number = number.replace(",", ".")
         return float(number)
-
-
-if __name__ == "__main__":
-    o = OnvistaScraper(isin="DE000BAY0017")
-    print(o.overview_url)
-    print(o.ebit_margin)
-    print(o.eps)
-    print(o.equity_ratio)
-    print(o.per)
-    # print(o.get_historic_data("20.1.2019"))
-    # print(o.analyst_ratings())
-    # print("ROE: %s" % o.roe())
-    # print("EPS: %s" % o.eps())
-    # print("EBIT-MARGIN: %s" % o.ebit_margin())
-    # print("EQUITY RATIO: %s" % o.equity_ratio())
-    # print(o._fetch_fundamental_webpage())
-    # print(o._fetch_overview_webpage())
