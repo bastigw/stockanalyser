@@ -4,10 +4,10 @@ from datetime import date, timedelta
 from enum import Enum, unique
 
 from stockanalyser.analysis import levernann_result
+from stockanalyser.data_source import common
+from stockanalyser.database import database_interface
 from stockanalyser.exceptions import NotSupportedError
 from stockanalyser.stock import Cap, Stock
-from stockanalyser.data_source import common
-from database import database_interface
 
 logger = logging.getLogger(__name__)
 
@@ -43,23 +43,6 @@ class Recommendation(Enum):
     HOLD = 2
     SELL = 3
     NONE = 0
-
-
-# def levermann_pickle_path(symbol, path=DATA_PATH):
-#     filename = fileutils.to_pickle_filename(symbol + ".levermann")
-#     path = os.path.join(path, filename)
-#     return path
-#
-#
-# def unpickle_levermann_sym(symbol):
-#     path = levermann_pickle_path(symbol)
-#     return unpickle_levermann(path)
-#
-#
-# def unpickle_levermann(path):
-#     levermann_object = pickle.load(open(path, "rb"))
-#     logger.debug("Unpickled Levermann Analysis for Stock: {} from '{}'".format(levermann_object.stock.symbol, path))
-#     return levermann_object
 
 
 class EvaluationResult(object):
@@ -479,24 +462,14 @@ class Levermann(object):
                 return CriteriaRating(None, 0)
             logger.debug("Analyst ratings: %s" % str(analyst_ratings))
             consensus = analyst_ratings["consensus"]
-            number_of_analysts = int(analyst_ratings["n_of_analysts"])
-            ratings = {
-                "KAUFEN": 1,
-                "AUFSTOCKEN": 2,
-                "HALTEN": 3,
-                "REDUZIEREN": 4,
-                "VERKAUFEN": 5
-            }
-
-            score = ratings[consensus]
-
+            number_of_analysts = int(analyst_ratings["n_analysts"])
             logger.debug("Analyst score: %s" % consensus)
 
-            if score == 2 or score == 1:
+            if consensus < 3:
                 _points = -1
-            elif score == 3:
+            elif consensus < 7:
                 _points = 0
-            elif score == 4 or score == 5:
+            elif consensus > 7:
                 _points = 1
             else:
                 raise ValueError("Wrong Type")
@@ -504,7 +477,7 @@ class Levermann(object):
             if number_of_analysts >= 5:
                 _points *= -1
 
-            return CriteriaRating(score, _points)
+            return CriteriaRating(consensus, _points)
         except (NameError, TypeError, ValueError, AttributeError, KeyError,
                 IndexError) as e:
             logging.exception(e)
@@ -536,7 +509,10 @@ class Levermann(object):
             per = self.stock.per[THIS_YEAR]
             logger.debug("Evaluating PER: %s" % per)
 
-            if 0 < per < 12:
+            if per is None or 0:
+                logger.warn("Missing PER (KGV) information")
+                return CriteriaRating(0, 0)
+            elif 0 < per < 12:
                 logger.debug("PER <12: 1 Points")
                 _points = 1
             elif 12 <= per <= 16:
