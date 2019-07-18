@@ -1,6 +1,7 @@
 import json
 import logging
 import re
+import numpy as np
 
 from stockanalyser.data_source import common
 from stockanalyser import exceptions
@@ -31,7 +32,7 @@ class MarketScreenerScraper(object):
         self._data_revision_ny: dict = {}
 
     @property
-    def consensus(self):
+    def consensus_data(self):
         if not self._data_consensus:
             self._set_consensus()
         return self._data_consensus
@@ -74,26 +75,26 @@ class MarketScreenerScraper(object):
     def _set_revision(self):
         url = "https://de.marketscreener.com//reuters_charts/afDataFeed.php?repNo={}&codeZB=&t=rev&sub_t=bna&iLang=1".format(
             self.id)
-        data = json.loads(common.request_url_to_str(url))
-        eps_four_weeks_cy = data[0][0][-20][1]
-        date_four_weeks_cy = data[0][0][-20][0]
+        revisions_data = json.loads(common.request_url_to_str(url))
+        eps_four_weeks_cy = revisions_data[0][0][-20][1]
+        date_four_weeks_cy = revisions_data[0][0][-20][0]
         date_four_weeks_cy = common.unixtime_to_datetime(
             date_four_weeks_cy, milliseconds=True)
 
-        eps_today_cy = data[0][0][-1][1]
-        date_today_cy = data[0][0][-1][0]
+        eps_today_cy = revisions_data[0][0][-1][1]
+        date_today_cy = revisions_data[0][0][-1][0]
         date_today_cy = common.unixtime_to_datetime(
             date_today_cy, milliseconds=True)
         change_cy = (eps_today_cy / eps_four_weeks_cy) * 100 - 100
         change_cy = round(change_cy, 2)
 
-        eps_four_weeks_ny = data[0][1][-20][1]
-        date_four_weeks_ny = data[0][1][-20][0]
+        eps_four_weeks_ny = revisions_data[0][1][-20][1]
+        date_four_weeks_ny = revisions_data[0][1][-20][0]
         date_four_weeks_ny = common.unixtime_to_datetime(
             date_four_weeks_ny, True)
 
-        eps_today_ny = data[0][1][-1][1]
-        date_today_ny = data[0][0][-1][0]
+        eps_today_ny = revisions_data[0][1][-1][1]
+        date_today_ny = revisions_data[0][0][-1][0]
         date_today_ny = common.unixtime_to_datetime(date_today_ny, True)
 
         change_ny = (eps_today_ny / eps_four_weeks_ny) * 100 - 100
@@ -108,22 +109,23 @@ class MarketScreenerScraper(object):
         # return self._data_revision_cy, self._data_revision_ny
 
     def _set_consensus(self):
-        xpath = '//*[@id="zbCenter"]/div/span/table[4]/tr/td[3]/div[2]/div[2]/table/tr'
-        url_response = common.url_to_etree(self.URL_consensus)
-        self._data_consensus["consensus"] = url_response.xpath(
-            xpath + "[1]/td[2]")[0].text_content().replace(" ", "").replace("\n", "").replace("\r", "")
-        self._data_consensus["n_of_analysts"] = url_response.xpath(
-            xpath + "[2]/td[2]")[0].text_content().replace(" ", "").replace("\n", "").replace("\r", "")
-        self._data_consensus["price_target_average"] = float(
-            url_response.xpath(xpath + "[3]/td[2]")[0].text_content().replace(" ", "").replace("\n", "").replace("\r", "").replace(',', '.').replace(u'\xa0', u'').strip("€"))
-        try:
-            self._data_consensus["out_of_ten"] = float(
-                re.findall(
-                    r'(\d.?\d?\d?) \/ 10',
-                    url_response.xpath(
-                        '//*[@id="zbCenter"]/div/span/table[4]/tr/td[3]/div[2]/div[1]/div/div[2]/table/tr/td[2]/table/@title')[0]
-                )[0])
-        except IndexError as e:
-            logger.error(e)
+        url = "https://de.marketscreener.com/reuters_charts/afDataFeed.php?codeZB={}&t=dcons&iLang=3".format(
+            self.id
+        )
+        consensus_data = json.loads(common.request_url_to_str(url))
 
-        # return self._data_consensus
+        consensus_weighted = []
+        consensus_weighted[0] = 10 * consensus_data[0]["reco_BUY"]
+        consensus_weighted[1] = 7.5 * consensus_data[0]["reco_OUTPERFORM"]
+        consensus_weighted[2] = 5 * consensus_data[0]["reco_HOLD"]
+        consensus_weighted[3] = 2.5 * consensus_data[0]["reco_UNDERPERFORM"]
+        consensus_weighted[4] = 0 * consensus_data[0]["reco_SELL"]
+
+        number_of_analyst = consensus_data[0]["reco_BUY"]
+        + consensus_data[0]["reco_OUTPERFORM"]
+        + consensus_data[0]["reco_HOLD"]
+        + consensus_data[0]["reco_UNDERPERFORM"]
+        + consensus_data[0]["reco_SELL"]
+
+        self._data_consensus["consensus"] = np.mean(consensus_weighted)
+        self._data_consensus["n_analysts"] = number_of_analyst
