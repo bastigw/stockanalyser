@@ -23,9 +23,9 @@ class MarketScreenerScraper(object):
         self.URL_revisions = self.URL + "reviews-revisions/"
         self.URL_consensus = self.URL + "analystenerwartungen/"
 
-        self.id = ms_id
-        if not self.id:
-            self.id = self._lookup_id()
+        self.codeZB = ms_id
+        if not self.codeZB:
+            self.codeZB = self._lookup_codeZB()
 
         self._data_consensus: dict = {}
         self._data_revision_cy: dict = {}
@@ -64,17 +64,12 @@ class MarketScreenerScraper(object):
                                                               )['href']
         raise exceptions.MissingDataError("Couldn't find link to stock")
 
-    def _lookup_id(self):
-        xpath = '//*[@id="zbCenter"]/div/span/table[4]/tr/td[1]/table[1]/tr[2]/td/div[2]/a/@href'
-        url = self.URL_revisions
-        lxml_html = common.url_to_etree(url)
-        link = lxml_html.xpath(xpath)[0]
-        id_marketscreener = link.split("&")[1][6:]
-        return id_marketscreener
+    def _lookup_codeZB(self):
+        return self.URL.split('/')[-2].split('-')[-1]
 
     def _set_revision(self):
-        url = "https://de.marketscreener.com//reuters_charts/afDataFeed.php?repNo={}&codeZB=&t=rev&sub_t=bna&iLang=1".format(
-            self.id)
+        url = "https://de.marketscreener.com//reuters_charts/afDataFeed.php?&codeZB={}&t=rev&sub_t=bna&iLang=1".format(
+            self.codeZB)
         revisions_data = json.loads(common.request_url_to_str(url))
         eps_four_weeks_cy = revisions_data[0][0][-20][1]
         date_four_weeks_cy = revisions_data[0][0][-20][0]
@@ -110,22 +105,24 @@ class MarketScreenerScraper(object):
 
     def _set_consensus(self):
         url = "https://de.marketscreener.com/reuters_charts/afDataFeed.php?codeZB={}&t=dcons&iLang=3".format(
-            self.id
+            self.codeZB
         )
         consensus_data = json.loads(common.request_url_to_str(url))
 
+        if consensus_data[3] is False:
+            raise ValueError("Did not respond correctly (404)")
         consensus_weighted = []
-        consensus_weighted[0] = 10 * consensus_data[0]["reco_BUY"]
-        consensus_weighted[1] = 7.5 * consensus_data[0]["reco_OUTPERFORM"]
-        consensus_weighted[2] = 5 * consensus_data[0]["reco_HOLD"]
-        consensus_weighted[3] = 2.5 * consensus_data[0]["reco_UNDERPERFORM"]
-        consensus_weighted[4] = 0 * consensus_data[0]["reco_SELL"]
+        consensus_weighted.append(10 * consensus_data[0]["reco_BUY"])
+        consensus_weighted.append(7.5 * consensus_data[0]["reco_OUTPERFORM"])
+        consensus_weighted.append(5 * consensus_data[0]["reco_HOLD"])
+        consensus_weighted.append(2.5 * consensus_data[0]["reco_UNDERPERFORM"])
+        consensus_weighted.append(0 * consensus_data[0]["reco_SELL"])
 
-        number_of_analyst = consensus_data[0]["reco_BUY"]
-        + consensus_data[0]["reco_OUTPERFORM"]
-        + consensus_data[0]["reco_HOLD"]
-        + consensus_data[0]["reco_UNDERPERFORM"]
-        + consensus_data[0]["reco_SELL"]
+        number_of_analysts = consensus_data[0]["reco_BUY"]
+        number_of_analysts += consensus_data[0]["reco_OUTPERFORM"]
+        number_of_analysts += consensus_data[0]["reco_HOLD"]
+        number_of_analysts += consensus_data[0]["reco_UNDERPERFORM"]
+        number_of_analysts += consensus_data[0]["reco_SELL"]
 
-        self._data_consensus["consensus"] = np.mean(consensus_weighted)
-        self._data_consensus["n_analysts"] = number_of_analyst
+        self._data_consensus["consensus"] = round(sum(consensus_weighted) / number_of_analysts, 2)
+        self._data_consensus["n_analysts"] = number_of_analysts
