@@ -121,11 +121,12 @@ class FinanzenNetScraper(object):
                         break
                 except IndexError as err:
                     logger.error(err)
+                    continue
 
         else:
             logger.warning("Etree not defined")
 
-    @property  # TODO Test me: possibly not working correctly
+    @property
     def benchmark(self):
         if not self._benchmark:
             self._get_benchmark()
@@ -146,12 +147,3 @@ class FinanzenNetScraper(object):
         name = name.replace("_", "-")
         self._name = name
         return self._name
-
-
-if __name__ == "__main__":
-    fin = FinanzenNetScraper(
-        # url='https://www.finanzen.net/aktien/Aroundtown-Aktie',
-        isin='LU1673108939')
-    fin.lookup_url()
-    print(fin.quarterly_figure_dates)
-    pass
