@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 # Flask settings.
 DEBUG = bool(os.environ.get('DEBUG'))
-# SECRET_KEY = 'secret - change me'  # TODO: change me.
 
 app = Flask(__name__)
 app.config.from_object(__name__)
